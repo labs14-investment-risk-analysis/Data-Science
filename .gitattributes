@@ -1,2 +1,0 @@
-#`.gitattributes` file which reclassifies `.ipynb` files as Python:
-*.ipynb linguist-language=Python
