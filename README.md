@@ -7,28 +7,13 @@
 
 # Investement Risk Analysis
 
-You can find the project at [🚫URL NAME GOES HERE](🚫copy and paste URL here).
+## Contributors
 
-## 5️⃣ Contributors
-
-🚫Add contributor info below, make sure add images and edit the social links for each member. Add to or delete these place-holders as needed
-
-|                                       [Alexander Witt](https://github.com/alex-witt)                                        |                                       [Damerei Jha](https://github.com/damerei)                                        |                                       [Hira Khan](https://github.com/)                                        |                                       [Joe Bender](https://github.com/)                                        |                                       [Jor Ming Poon](https://github.com/JorPoon)                                        |
+|                                       [Alexander Witt](https://github.com/alex-witt)                                        |                                       [Damerei Jha](https://github.com/damerei)                                        |                                       [Hira Khan](https://github.com/)                                        |                                       [Joe Bender](https://github.com/jazzathoth)                                        |                                       [Jor Ming Poon](https://github.com/JorPoon)                                        |
 | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: |
 |                      [<img src="https://avatars3.githubusercontent.com/u/43584144?s=460&v=4" width = "200" />](https://avatars3.githubusercontent.com/u/43584144?s=460&v=4)                       |                      [<img src="https://blackswan2.dev/static/dj-82d8405a6cba6dbe74f86e6946b4e211.png" width = "200" />](https://blackswan2.dev/static/dj-82d8405a6cba6dbe74f86e6946b4e211.png)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "200" />](https://github.com/)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "200" />](https://github.com/)                       |                      [<img src="https://https://media.licdn.com/dms/image/C4D03AQHDeAV1fpgPjQ/profile-displayphoto-shrink_800_800/0?e=1571270400&v=beta&t=8iWYOsyquObIJg32ZzKKPVFbkIA26yIYbf4wTt8P6Zc" width = "200" />](https://media.licdn.com/dms/image/C4D03AQHDeAV1fpgPjQ/profile-displayphoto-shrink_800_800/0?e=1571270400&v=beta&t=8iWYOsyquObIJg32ZzKKPVFbkIA26yIYbf4wTt8P6Zc)                       |
-|                 [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/alex-witt)                 |            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/damerei)             |           [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/Mister-Corn)            |          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/NandoTheessen)           |            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/wvandolah)             |
-| [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/alexanderjwitt) |  | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/jor-ming-poon) |
-
-
-
-🚫 5️⃣ Optional examples of using images with links for your tech stack, make sure to change these to fit your project
-
-![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)
-![Typescript](https://img.shields.io/npm/types/typescript.svg?style=flat)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/b5c4db1c-b10d-42c3-b157-3746edd9e81d/deploy-status)](netlify link goes in these parenthesis)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-
-🚫 more info on using badges [here](https://github.com/badges/shields)
+|                 [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/alex-witt)                 |            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/damerei)             |           [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/Mister-Corn)            |          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/jazzathoth)           |            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/jorpoon)             |
+| [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/alexanderjwitt) |  | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/joe-bender) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/jor-ming-poon) |
 
 ## Project Overview
 
@@ -37,19 +22,30 @@ You can find the project at [🚫URL NAME GOES HERE](🚫copy and paste URL here
 
 [Product Canvas](https://www.notion.so/Investment-Risk-Analysis-a2ccc59778074d849bbd37449b6c1c38)
 
-🚫 Replace lorem ipsum with a description of your project
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+The Investment Risk Ratings Project has one overarching goal: to make equities investing simpler and safer by accurately assessing what the market factors that contribute to the risk of investing in a given company are. All investors, from the retail investor to the professional hedge fund manager, are faced with the daunting task of assimilating a forbiddingly vast amount of information that is changing on a daily basis, a cognitive demand that no one can master.
+By systematically breaking down the movement of a company’s stock price into its constituent factors - whether macroeconomic, technical, or fundamental - we can help diminish the overwhelming complexity of the investment process, and in turn make investing both a safer and more rational process.
 
 ### Tech Stack
 
-🚫 List all of the languages, frameworks, services, etc used here.
+Pandas 
+
+Sci-kit learn
+
+Tensorflow
+
+Pytorch
+
+Keras 
+
+Statsmodels.tsa
+
+rpy2
+
+Pyflux
 
 ### 2️⃣ Predictions
 
-🚫 Describe your models here
+Coming Soon
 
 ### 2️⃣ Explanatory Variables
 
