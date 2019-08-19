@@ -23,6 +23,7 @@
 [Product Canvas](https://www.notion.so/Investment-Risk-Analysis-a2ccc59778074d849bbd37449b6c1c38)
 
 The Investment Risk Ratings Project has one overarching goal: to make equities investing simpler and safer by accurately assessing what the market factors that contribute to the risk of investing in a given company are. All investors, from the retail investor to the professional hedge fund manager, are faced with the daunting task of assimilating a forbiddingly vast amount of information that is changing on a daily basis, a cognitive demand that no one can master.
+
 By systematically breaking down the movement of a company’s stock price into its constituent factors - whether macroeconomic, technical, or fundamental - we can help diminish the overwhelming complexity of the investment process, and in turn make investing both a safer and more rational process.
 
 ### Tech Stack
