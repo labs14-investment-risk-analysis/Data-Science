@@ -42,6 +42,9 @@ class DailyTimeSeries:
 
     intrinio_key : default
         api key for intrinio
+    
+    quandl_key : default
+        api key for Quandl
 
     -----------------------------
     Methods
@@ -64,10 +67,12 @@ class DailyTimeSeries:
         Adds FOREX rates to the dataset. Currently only incorporates a couple of years
         ############ Recommend against using until improved ##########################
 
-    add_treasury_bonds :
-        Adds US treasury Bond interest rates to the dataset. Contains a wide-swath of
-        available and unavailable bonds. Several features contain a large number of null
-        values. Will warn about those null values in the print statement.
+    add_macros :
+        Adds all the macro indicators including US treasury Bond interest rates,
+        National Housing Price Index, Trade-Weighted Dollar Price Index, Investors
+        Confidence Index, to the dataset. Some Indices do not have values recorded
+        for recent months and merging with other dataframes might limit the number of
+        datapoints. 
     """
 
 
@@ -325,11 +330,19 @@ class DailyTimeSeries:
             pandas dataframe to be appended.
         """
 
-        # Loop through the list of securities
+        index_dict = {
+                "housing_index" : "YALE/NHPI",
+                "confidence_index" : "YALE/US_CONF_INDEX_VAL_INDIV",
+                "trade_index" : "FRED/TWEXB",
+                "longterm_rates" : "USTREASURY/LONGTERMRATES",
+                "shortterm_rates" : "USTREASURY/BILLRATES"
+                }
+        
+        # Loop through the list of indices
         i_count = 0
         for i in indices:
-
-            data = quandl.get(i,
+            x = str(index_dict[i])
+            data = quandl.get(x,
                               authtoken=self.quandl_key)
             data.index.name = 'date'
             start_date = data.index.min() - pd.DateOffset(day=1)
@@ -338,6 +351,46 @@ class DailyTimeSeries:
             dates.name = 'date'
             data = data.reindex(dates, method = 'ffill')
             data.index = data.index.astype(str)
+
+        # Elif statements for changing the column names
+
+            if i == "housing_index":
+                data = data.rename(columns = {'Index' : 'housing_index'})
+            
+                print("Housing Data Added to the Existing DataFrame")
+            
+            elif i == "trade_index":
+                data = data.rename(columns = {'Value': 'trade_value'})
+            
+                print("Trade Index Added to the Existing DataFrame.")
+
+            elif i == "confidence_index":
+                data = data.rename(columns = {'Index Value' : 'conf_index', 'Standard Error': 'conf_index_SE'})
+            
+                print("Confidence Index Added to the Existing DataFrame.")
+
+            elif i == "longterm_rates":
+                data = data.rename(columns = {'LT Composite > 10 Yrs': '10 Yrs Rates', 'Treasury 20-Yr CMT': '20-Yr Maturity Rate'})
+                data = data.drop(columns = 'Extrapolation Factor')
+
+                print("Longterm Rates Added to the Existing DataFrame.")
+
+            elif i == "shortterm_rates":
+                data = data.rename(columns = {'4 Wk Bank Discount Rate': '4_Wk_DR',
+                                            '4 Wk Coupon Equiv': '4_Wk_CE',
+                                            '8 Wk Bank Discount Rate' : '8_Wk_DR',
+                                            '8 Wk Coupon Equiv' : '8_Wk_CE',
+                                            '13 Wk Bank Discount Rate' : '13_Wk_DR',
+                                            '13 Wk Coupon Equiv': '13_Wk_CE',
+                                            '26 Wk Bank Discount Rate': '26_Wk_DR',
+                                            '26 Wk Coupon Equiv': '26_Wk_CE',
+                                            '52 Wk Bank Discount Rate': '52_Wk_DR',
+                                            '52 Wk Coupon Equiv': '52_Wk_CE'})
+            
+                print("Shortterm Rates Added to the Existing DataFrame.")
+
+            else: 
+                pass     
 
             if i_count == 0:
                 final_df = primary_df.merge(data,
@@ -348,5 +401,7 @@ class DailyTimeSeries:
                                       how='inner',
                                       on='date')
             i_count+=1
+
+            
 
         return final_df
