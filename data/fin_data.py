@@ -7,11 +7,8 @@ from decouple import config
 import pandas as pd
 import numpy as np
 import quandl
-<<<<<<< HEAD
 import datetime
-=======
 import warnings
->>>>>>> 4ae7847590cb058b81ad6dbae7568ca264f55d91
 
 #pylint: disable=invalid-sequence-index
 #pylint: disable=no-member
