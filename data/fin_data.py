@@ -1,3 +1,5 @@
+from fin_data_fundamentals import find_fundamentals
+from fin_data_fundamentals import get_fundamentals
 from alpha_vantage.foreignexchange import ForeignExchange
 from alpha_vantage.techindicators import TechIndicators
 from alpha_vantage.timeseries import TimeSeries
@@ -5,6 +7,7 @@ from decouple import config
 import pandas as pd
 import numpy as np
 import quandl
+import datetime
 import warnings
 
 #pylint: disable=invalid-sequence-index
@@ -280,45 +283,6 @@ class DailyTimeSeries:
                                     on='date')
         return final_df
 
-    def add_treasury_bonds(self, primary_df):
-        """
-        Adds US treasury Bond interest rates to the dataset. Contains a wide-swath of
-        available and unavailable bonds. Several features contain a large number of null
-        values. Will warn about those null values in the print statement.
-
-        Parameters
-        ----------
-        primary_df : pandas dataframe
-            pandas dataframe to be appended.
-       """
-        # API Call
-        data = quandl.get("USTREASURY/BILLRATES",
-                        authtoken=config('QUANDL_KEY'))
-
-        # Checking for nulls
-        nulls = data.isnull().sum()
-
-        # Print statements for status checks
-        print("######### US Treasury Bond Rates Added #########")
-        print('##### New columns that contain null values #####')
-        print('################################################','\n')
-        for i in np.arange(len(nulls)):
-            if nulls[i] > 0:
-                print("#####",nulls.index[i])
-        print()
-        print('################################################')
-
-        data.index.name = 'date'
-
-        # Final Merge
-        final_df = primary_df.merge(data,
-                                    how='inner',
-                                    on='date')
-        return final_df
-
-# take a list as input, then loop through that list
-# exact input that we are looking for  in variable:
-# what
     def add_macro(self, primary_df, indices):
         """
         Adds macroeconomic indicators from a list of indices and merges that
@@ -410,3 +374,53 @@ class DailyTimeSeries:
             
 
         return final_df
+
+    
+    def add_fundamentals(self, primary_df, fundamentals_list):
+        
+        from fin_data_fundamentals import increment_months
+        
+                
+        dates_sorted = sorted(primary_df.index, key=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'))
+        
+        preceding_quarter_date = increment_months(datetime.datetime.strptime(dates_sorted[0], '%Y-%m-%d'), -4).strftime("%Y-%m-%d")
+        
+        before_date = dates_sorted[-1]
+        after_date = dates_sorted[0]
+        
+        
+        
+        fun_df = get_fundamentals(tkr_id=self.symbol, 
+                                  after_date=after_date, 
+                                  fundamentals_toget=fundamentals_list, 
+                                  sandbox=False, 
+                                  return_df=True).set_index('date')
+        
+        
+        columns = primary_df.columns.append(fun_df.columns)
+        
+        ntrm_df = primary_df.reindex(columns=primary_df.columns.append(fun_df.columns))
+        
+        for row in fun_df.iterrows():
+            date_qr = row[0]
+            for col in row[1].index:
+                 ntrm_df.loc[ntrm_df.index == date_qr, col] = row[1][col]
+        
+        
+        before_df = get_fundamentals(tkr_id=self.symbol,
+                                     after_date=preceding_quarter_date,
+                                     end_date=after_date,
+                                     fundamentals_toget=fundamentals_list,
+                                     sandbox=False,
+                                     return_df=True
+                                    )
+        if len(before_df) != 0:
+            if ntrm_df.iloc[0].isnull().any():
+                for k,v in zip(before_df.iloc[0].index, before_df.iloc[0].values):
+                    if k != 'date':
+                        ntrm_df.loc[ntrm_df.index == after_date, k] = v
+        
+        ntrm_df = ntrm_df.fillna(method='ffill')
+
+
+        return(ntrm_df)
