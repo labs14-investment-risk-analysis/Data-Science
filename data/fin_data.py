@@ -8,7 +8,6 @@ import pandas as pd
 import numpy as np
 import quandl
 import datetime
-import warnings
 
 #pylint: disable=invalid-sequence-index
 #pylint: disable=no-member
@@ -46,9 +45,6 @@ class DailyTimeSeries:
 
     intrinio_key : default
         api key for intrinio
-    
-    quandl_key : default
-        api key for Quandl
 
     -----------------------------
     Methods
@@ -71,12 +67,10 @@ class DailyTimeSeries:
         Adds FOREX rates to the dataset. Currently only incorporates a couple of years
         ############ Recommend against using until improved ##########################
 
-    add_macros :
-        Adds all the macro indicators including US treasury Bond interest rates,
-        National Housing Price Index, Trade-Weighted Dollar Price Index, Investors
-        Confidence Index, to the dataset. Some Indices do not have values recorded
-        for recent months and merging with other dataframes might limit the number of
-        datapoints. 
+    add_treasury_bonds :
+        Adds US treasury Bond interest rates to the dataset. Contains a wide-swath of
+        available and unavailable bonds. Several features contain a large number of null
+        values. Will warn about those null values in the print statement.
     """
 
 
@@ -283,6 +277,45 @@ class DailyTimeSeries:
                                     on='date')
         return final_df
 
+    def add_treasury_bonds(self, primary_df):
+        """
+        Adds US treasury Bond interest rates to the dataset. Contains a wide-swath of
+        available and unavailable bonds. Several features contain a large number of null
+        values. Will warn about those null values in the print statement.
+
+        Parameters
+        ----------
+        primary_df : pandas dataframe
+            pandas dataframe to be appended.
+       """
+        # API Call
+        data = quandl.get("USTREASURY/BILLRATES",
+                        authtoken=config('QUANDL_KEY'))
+
+        # Checking for nulls
+        nulls = data.isnull().sum()
+
+        # Print statements for status checks
+        print("######### US Treasury Bond Rates Added #########")
+        print('##### New columns that contain null values #####')
+        print('################################################','\n')
+        for i in np.arange(len(nulls)):
+            if nulls[i] > 0:
+                print("#####",nulls.index[i])
+        print()
+        print('################################################')
+
+        data.index.name = 'date'
+
+        # Final Merge
+        final_df = primary_df.merge(data,
+                                    how='inner',
+                                    on='date')
+        return final_df
+
+# take a list as input, then loop through that list
+# exact input that we are looking for  in variable:
+# what
     def add_macro(self, primary_df, indices):
         """
         Adds macroeconomic indicators from a list of indices and merges that
@@ -294,21 +327,12 @@ class DailyTimeSeries:
         primary_df : pandas dataframe
             pandas dataframe to be appended.
         """
-        warnings.warn("Some of the indices do not have recent values and performing a merge with the trading data would limit the number of observations.")
 
-        index_dict = {
-                "housing_index" : "YALE/NHPI",
-                "confidence_index" : "YALE/US_CONF_INDEX_VAL_INDIV",
-                "trade_index" : "FRED/TWEXB",
-                "longterm_rates" : "USTREASURY/LONGTERMRATES",
-                "shortterm_rates" : "USTREASURY/BILLRATES"
-                }
-        
-        # Loop through the list of indices
+        # Loop through the list of securities
         i_count = 0
         for i in indices:
-            x = str(index_dict[i])
-            data = quandl.get(x,
+
+            data = quandl.get(i,
                               authtoken=self.quandl_key)
             data.index.name = 'date'
             start_date = data.index.min() - pd.DateOffset(day=1)
@@ -317,49 +341,6 @@ class DailyTimeSeries:
             dates.name = 'date'
             data = data.reindex(dates, method = 'ffill')
             data.index = data.index.astype(str)
-
-        # Elif statements for changing the column names
-
-            if i == "housing_index":
-                data = data.rename(columns = {'Index' : 'housing_index'})
-            
-                print("Housing Data Added to the Existing DataFrame")
-
-                warnings.warn("The latest value available for Housing Index is from January 2019.")
-            
-            elif i == "trade_index":
-                data = data.rename(columns = {'Value': 'trade_value'})
-            
-                print("Trade Index Added to the Existing DataFrame.")
-                warnings.warn("The values for Trade Index are recorded on a weekly basis.")
-            elif i == "confidence_index":
-                data = data.rename(columns = {'Index Value' : 'conf_index', 'Standard Error': 'conf_index_SE'})
-            
-                print("Confidence Index Added to the Existing DataFrame.")
-                warnings.warn("The value for confidence index are available in a monthly basis")
-
-            elif i == "longterm_rates":
-                data = data.rename(columns = {'LT Composite > 10 Yrs': '10 Yrs Rates', 'Treasury 20-Yr CMT': '20-Yr Maturity Rate'})
-                data = data.drop(columns = 'Extrapolation Factor')
-
-                print("Longterm Rates Added to the Existing DataFrame.")
-
-            elif i == "shortterm_rates":
-                data = data.rename(columns = {'4 Wk Bank Discount Rate': '4_Wk_DR',
-                                            '4 Wk Coupon Equiv': '4_Wk_CE',
-                                            '8 Wk Bank Discount Rate' : '8_Wk_DR',
-                                            '8 Wk Coupon Equiv' : '8_Wk_CE',
-                                            '13 Wk Bank Discount Rate' : '13_Wk_DR',
-                                            '13 Wk Coupon Equiv': '13_Wk_CE',
-                                            '26 Wk Bank Discount Rate': '26_Wk_DR',
-                                            '26 Wk Coupon Equiv': '26_Wk_CE',
-                                            '52 Wk Bank Discount Rate': '52_Wk_DR',
-                                            '52 Wk Coupon Equiv': '52_Wk_CE'})
-            
-                print("Shortterm Rates Added to the Existing DataFrame.")
-
-            else: 
-                pass     
 
             if i_count == 0:
                 final_df = primary_df.merge(data,
@@ -370,8 +351,6 @@ class DailyTimeSeries:
                                       how='inner',
                                       on='date')
             i_count+=1
-
-            
 
         return final_df
 

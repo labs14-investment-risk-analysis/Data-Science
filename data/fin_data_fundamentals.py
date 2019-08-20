@@ -9,10 +9,19 @@ import datetime
 import calendar
 
 def increment_months(orig_date, inc):
-    # advance year and month by one month
+    
+    """The increment_months() function advances or reduces month in a datetime
+    object.
+    
+    -- orig_date: datetime object to be changed. 
+    
+    -- inc: number of months to increment. Accepts signed integer 
+    to increment or decrement."""
+    
     new_year = orig_date.year
     new_month = orig_date.month + inc
     # note: in datetime.date, months go from 1 to 12
+    # conditional advances year if necessary 
     if new_month > 12:
         new_year += 1
         new_month -= 12
@@ -27,6 +36,34 @@ def increment_months(orig_date, inc):
 
 
 def get_fundamentals(tkr_id, after_date, end_date='', fundamentals_toget = 'all', sandbox=False, return_df=False, nocomm=False):
+    
+        """Get fundamentals indicators from the intrinio api. Returns intrinio's standardized
+    fundamentals data from quartarly financial reports. Pass the ticker id, dates,
+    and a list of fundamentals.
+    
+    -- tkr_id: stock ticker name. 'AAPL' for Apple inc, 'XOM' for Exxon Mobile Corp. etc.
+            (if using a developer sandbox key, only DOW 30 will be available)
+    
+    -- after_date: Get fundamentals data from financial reports published after this date.
+            ***Pass dates as strings in '%Y-%m-%d' format
+    
+    -- end_date: Default or empty string for present date. 
+            ***Pass dates as strings in '%Y-%m-%d' format
+    
+    -- fundamentals_toget: Default 'all' or pass list of fundamentals to get. Get
+        indicator names with find_fundamentals('<tickerId>') in fin_data package.
+        (from fin_data import find_fundamentals)
+    
+    -- sandbox: Use this to turn sandbox mode on and off if you have a developers 
+        sandbox api key. Limited to DOW 30, but much less strict limits on api calls.
+    
+    -- return_df: Return results as pandas DataFrame or as dict. Dict may be more useful
+        for direct integration into other code. Returned DataFrame is formatted for use
+        in the fin_data tool to integrate fundamentals data with time series indicators.
+        
+    *In .env file name main key INTRINIO_KEY and developer sandbox key INTRINIO_SANDBOX_KEY"""
+    
+    
     if sandbox == False:
         intrinio_sdk.ApiClient().configuration.api_key['api_key'] = config('INTRINIO_KEY')
 
@@ -133,6 +170,19 @@ def get_fundamentals(tkr_id, after_date, end_date='', fundamentals_toget = 'all'
         
         
 def find_fundamentals(tkr_id, sandbox = False):
+    
+        """Returns a list of available fundamental financial indicators for the
+    specified company.
+    
+    -- tkr_id: stock ticker name. 'AAPL' for Apple inc, 'XOM' for Exxon Mobile Corp. etc.
+            (if using a developer sandbox key, only DOW 30 will be available)
+    
+    -- sandbox: Use this to turn sandbox mode on and off if you have a developers 
+        sandbox api key. Limited to DOW 30, but much less strict limits on api calls.
+        
+    *In .env file name main key INTRINIO_KEY and developer sandbox key INTRINIO_SANDBOX_KEY"""
+
+
     if sandbox == False:
         intrinio_sdk.ApiClient().configuration.api_key['api_key'] = config('INTRINIO_KEY')
 
