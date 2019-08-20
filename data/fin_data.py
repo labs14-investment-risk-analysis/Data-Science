@@ -280,42 +280,6 @@ class DailyTimeSeries:
                                     on='date')
         return final_df
 
-    def add_treasury_bonds(self, primary_df):
-        """
-        Adds US treasury Bond interest rates to the dataset. Contains a wide-swath of
-        available and unavailable bonds. Several features contain a large number of null
-        values. Will warn about those null values in the print statement.
-
-        Parameters
-        ----------
-        primary_df : pandas dataframe
-            pandas dataframe to be appended.
-       """
-        # API Call
-        data = quandl.get("USTREASURY/BILLRATES",
-                        authtoken=config('QUANDL_KEY'))
-
-        # Checking for nulls
-        nulls = data.isnull().sum()
-
-        # Print statements for status checks
-        print("######### US Treasury Bond Rates Added #########")
-        print('##### New columns that contain null values #####')
-        print('################################################','\n')
-        for i in np.arange(len(nulls)):
-            if nulls[i] > 0:
-                print("#####",nulls.index[i])
-        print()
-        print('################################################')
-
-        data.index.name = 'date'
-
-        # Final Merge
-        final_df = primary_df.merge(data,
-                                    how='inner',
-                                    on='date')
-        return final_df
-
     def add_macro(self, primary_df, indices):
         """
         Adds macroeconomic indicators from a list of indices and merges that
