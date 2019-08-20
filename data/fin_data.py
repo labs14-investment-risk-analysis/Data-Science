@@ -5,6 +5,7 @@ from decouple import config
 import pandas as pd
 import numpy as np
 import quandl
+import warnings
 
 #pylint: disable=invalid-sequence-index
 #pylint: disable=no-member
@@ -329,6 +330,7 @@ class DailyTimeSeries:
         primary_df : pandas dataframe
             pandas dataframe to be appended.
         """
+        warnings.warn("Some of the indices do not have recent values and performing a merge with the trading data would limit the number of observations.")
 
         index_dict = {
                 "housing_index" : "YALE/NHPI",
@@ -358,16 +360,19 @@ class DailyTimeSeries:
                 data = data.rename(columns = {'Index' : 'housing_index'})
             
                 print("Housing Data Added to the Existing DataFrame")
+
+                warnings.warn("The latest value available for Housing Index is from January 2019.")
             
             elif i == "trade_index":
                 data = data.rename(columns = {'Value': 'trade_value'})
             
                 print("Trade Index Added to the Existing DataFrame.")
-
+                warnings.warn("The values for Trade Index are recorded on a weekly basis.")
             elif i == "confidence_index":
                 data = data.rename(columns = {'Index Value' : 'conf_index', 'Standard Error': 'conf_index_SE'})
             
                 print("Confidence Index Added to the Existing DataFrame.")
+                warnings.warn("The value for confidence index are available in a monthly basis")
 
             elif i == "longterm_rates":
                 data = data.rename(columns = {'LT Composite > 10 Yrs': '10 Yrs Rates', 'Treasury 20-Yr CMT': '20-Yr Maturity Rate'})
