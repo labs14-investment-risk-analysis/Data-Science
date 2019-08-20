@@ -316,9 +316,6 @@ class DailyTimeSeries:
                                     on='date')
         return final_df
 
-# take a list as input, then loop through that list
-# exact input that we are looking for  in variable:
-# what
     def add_macro(self, primary_df, indices):
         """
         Adds macroeconomic indicators from a list of indices and merges that
