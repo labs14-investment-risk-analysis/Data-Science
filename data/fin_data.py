@@ -1,3 +1,5 @@
+from fin_data_fundamentals import find_fundamentals
+from fin_data_fundamentals import get_fundamentals
 from alpha_vantage.foreignexchange import ForeignExchange
 from alpha_vantage.techindicators import TechIndicators
 from alpha_vantage.timeseries import TimeSeries
@@ -5,7 +7,11 @@ from decouple import config
 import pandas as pd
 import numpy as np
 import quandl
+<<<<<<< HEAD
+import datetime
+=======
 import warnings
+>>>>>>> 4ae7847590cb058b81ad6dbae7568ca264f55d91
 
 #pylint: disable=invalid-sequence-index
 #pylint: disable=no-member
@@ -371,3 +377,53 @@ class DailyTimeSeries:
             
 
         return final_df
+
+    
+    def add_fundamentals(self, primary_df, fundamentals_list):
+        
+        from fin_data_fundamentals import increment_months
+        
+                
+        dates_sorted = sorted(primary_df.index, key=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'))
+        
+        preceding_quarter_date = increment_months(datetime.datetime.strptime(dates_sorted[0], '%Y-%m-%d'), -4).strftime("%Y-%m-%d")
+        
+        before_date = dates_sorted[-1]
+        after_date = dates_sorted[0]
+        
+        
+        
+        fun_df = get_fundamentals(tkr_id=self.symbol, 
+                                  after_date=after_date, 
+                                  fundamentals_toget=fundamentals_list, 
+                                  sandbox=False, 
+                                  return_df=True).set_index('date')
+        
+        
+        columns = primary_df.columns.append(fun_df.columns)
+        
+        ntrm_df = primary_df.reindex(columns=primary_df.columns.append(fun_df.columns))
+        
+        for row in fun_df.iterrows():
+            date_qr = row[0]
+            for col in row[1].index:
+                 ntrm_df.loc[ntrm_df.index == date_qr, col] = row[1][col]
+        
+        
+        before_df = get_fundamentals(tkr_id=self.symbol,
+                                     after_date=preceding_quarter_date,
+                                     end_date=after_date,
+                                     fundamentals_toget=fundamentals_list,
+                                     sandbox=False,
+                                     return_df=True
+                                    )
+        if len(before_df) != 0:
+            if ntrm_df.iloc[0].isnull().any():
+                for k,v in zip(before_df.iloc[0].index, before_df.iloc[0].values):
+                    if k != 'date':
+                        ntrm_df.loc[ntrm_df.index == after_date, k] = v
+        
+        ntrm_df = ntrm_df.fillna(method='ffill')
+
+
+        return(ntrm_df)
