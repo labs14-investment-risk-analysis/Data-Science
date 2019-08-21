@@ -39,7 +39,7 @@ There are several libraries that are necessary to use fin_data. Once modeling co
 
 ### Environment Variables and Secrets
 
-The API keys should be contained in a `.env` file located in the same directory as `fin_data`. The directory should also contain a .gitignore. These environment variables are then referenced using the `python decouple` module. To install the modele, run the following command in a your terminal.
+The API keys should be contained in a `.env` file located in the same directory as `fin_data`. The repository should also contain a .gitignore. These environment variables are then referenced using the `python decouple` module. To install the module, run the following command in a your terminal.
 
     pip install python-decouple
 
@@ -75,7 +75,7 @@ From here, you can judiciously add other financial information to your dataframe
 
 ## Additional Methods
 
-These methods are the meat of fin_data. It ingests data from API calls and merges them to the given dataframe with an inner merge on the datetime index. In cases where the new data is relatively sparse, it may significantly reduce the total amount of data in the dataset. **Some methods are still in development.**
+These methods are the meat of fin_data. It ingests data from API calls and merges them to the given dataframe with an inner merge on the datetime index. In cases where the new data is relatively sparse, it may significantly reduce the total amount of data in the dataset. 
 
 ### add_securities()
 
