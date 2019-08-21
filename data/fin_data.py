@@ -8,7 +8,6 @@ import pandas as pd
 import numpy as np
 import quandl
 import datetime
-import warnings
 
 #pylint: disable=invalid-sequence-index
 #pylint: disable=no-member
@@ -42,9 +41,6 @@ class DailyTimeSeries:
 
     intrinio_key : default
         api key for intrinio
-    
-    quandl_key : default
-        api key for Quandl
 
     -----------------------------
     Methods
@@ -274,8 +270,8 @@ class DailyTimeSeries:
         # Loop through the list of indices
         i_count = 0
         for i in indices:
-            x = str(index_dict[i])
-            data = quandl.get(x,
+
+            data = quandl.get(i,
                               authtoken=self.quandl_key)
             data.index.name = 'date'
             start_date = data.index.min() - pd.DateOffset(day=1)
@@ -348,8 +344,6 @@ class DailyTimeSeries:
                                       how='inner',
                                       on='date')
             i_count+=1
-
-            
 
         return final_df
 
@@ -455,5 +449,13 @@ class DailyTimeSeries:
               'Fundamentals Retrieved: ', columns.values,'\n',
               '###################################################################')
 
+        
+          # Print Statement
+        print('###################################################################','\n',
+        'Ticker: ' , self.symbol, '\n',
+        'Retrieved Data Start Date: ', sorted(fun_df.index, key=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'))[0], '\n',
+        'Retrieved Data End Date: ', before_date, '\n',
+        'Data Retrieved: ', list(fun_df.columns),'\n',
+        '###################################################################')
 
         return(ntrm_df)
