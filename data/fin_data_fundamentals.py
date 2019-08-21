@@ -211,7 +211,7 @@ def find_fundamentals(tkr_id, sandbox = False):
     *In .env file name main key INTRINIO_KEY and developer sandbox key INTRINIO_SANDBOX_KEY
     """
 
-
+    # Sandbox check and get env key
     if sandbox == False:
         intrinio_sdk.ApiClient().configuration.api_key['api_key'] = config('INTRINIO_KEY')
 
@@ -221,9 +221,11 @@ def find_fundamentals(tkr_id, sandbox = False):
 
         security_api = intrinio_sdk.SecurityApi()
     
+    # Initialize api's
     capi = intrinio_sdk.CompanyApi()
     fapi = intrinio_sdk.FundamentalsApi()
     
+    # Set parameters to get most recent financial report
     fund_params = {
         'identifier'     :tkr_id,
         'filed_after'    :'2018-06-01',
@@ -238,6 +240,7 @@ def find_fundamentals(tkr_id, sandbox = False):
         'next_page'      :''
     }
     
+    # Get most recent financials report
     fundamentals = capi.get_company_fundamentals(**fund_params)
     id_to_check = fundamentals.fundamentals[0].id
     fun_check = fapi.get_fundamental_standardized_financials(id_to_check)
@@ -246,6 +249,7 @@ def find_fundamentals(tkr_id, sandbox = False):
     
     common = ['date', 'fiscal_year', 'quarter']
     
+    # Make list of available fundamentals and add above
     for fun in fun_check.standardized_financials:
         available_fun.append(fun.data_tag.tag)
     available_fun.append(common)
