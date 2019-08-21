@@ -408,16 +408,11 @@ class DailyTimeSeries:
         
         before_date = dates_sorted[-1]
         after_date = dates_sorted[0]
-        
-        
-<<<<<<< HEAD
+
+
         # Run get_fundamentals function, return results as dataframe
         # set 'date' as index
         fun_df = get_fundamentals(tkr_id=self.symbol, 
-=======
-        
-        fun_df = get_fundamentals(tkr_id=symbol, 
->>>>>>> 1ee07d1884068616501d2919f565b65e9dc1502e
                                   after_date=after_date, 
                                   fundamentals_toget=fundamentals_list, 
                                   sandbox=False, 
@@ -439,14 +434,9 @@ class DailyTimeSeries:
             date_qr = row[0]
             for col in row[1].index:
                  ntrm_df.loc[ntrm_df.index == date_qr, col] = row[1][col]
-        
-<<<<<<< HEAD
+
         # Call to get fundamentals for earliest dates to ffill
         before_df = get_fundamentals(tkr_id=self.symbol,
-=======
-        
-        before_df = get_fundamentals(tkr_id=symbol,
->>>>>>> 1ee07d1884068616501d2919f565b65e9dc1502e
                                      after_date=preceding_quarter_date,
                                      end_date=after_date,
                                      fundamentals_toget=fundamentals_list,
