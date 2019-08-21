@@ -401,5 +401,13 @@ class DailyTimeSeries:
         
         ntrm_df = ntrm_df.fillna(method='ffill')
 
+        
+          # Print Statement
+        print('###################################################################','\n',
+        'Ticker: ' , self.symbol, '\n',
+        'Retrieved Data Start Date: ', sorted(fun_df.index, key=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'))[0], '\n',
+        'Retrieved Data End Date: ', before_date, '\n',
+        'Data Retrieved: ', list(fun_df.columns),'\n',
+        '###################################################################')
 
         return(ntrm_df)

@@ -10,13 +10,15 @@ import calendar
 
 def increment_months(orig_date, inc):
     
-    """The increment_months() function advances or reduces month in a datetime
+    """
+    The increment_months() function advances or reduces month in a datetime
     object.
     
     -- orig_date: datetime object to be changed. 
     
     -- inc: number of months to increment. Accepts signed integer 
-    to increment or decrement."""
+    to increment or decrement.
+    """
     
     new_year = orig_date.year
     new_month = orig_date.month + inc
@@ -36,8 +38,9 @@ def increment_months(orig_date, inc):
 
 
 def get_fundamentals(tkr_id, after_date, end_date='', fundamentals_toget = 'all', sandbox=False, return_df=False, nocomm=False):
-    
-        """Get fundamentals indicators from the intrinio api. Returns intrinio's standardized
+
+    """
+    Get fundamentals indicators from the intrinio api. Returns intrinio's standardized
     fundamentals data from quartarly financial reports. Pass the ticker id, dates,
     and a list of fundamentals.
     
@@ -60,10 +63,11 @@ def get_fundamentals(tkr_id, after_date, end_date='', fundamentals_toget = 'all'
     -- return_df: Return results as pandas DataFrame or as dict. Dict may be more useful
         for direct integration into other code. Returned DataFrame is formatted for use
         in the fin_data tool to integrate fundamentals data with time series indicators.
-        
-    *In .env file name main key INTRINIO_KEY and developer sandbox key INTRINIO_SANDBOX_KEY"""
-    
-    
+
+    *In .env file name main key INTRINIO_KEY and developer sandbox key INTRINIO_SANDBOX_KEY
+    """
+
+
     if sandbox == False:
         intrinio_sdk.ApiClient().configuration.api_key['api_key'] = config('INTRINIO_KEY')
 
@@ -171,7 +175,8 @@ def get_fundamentals(tkr_id, after_date, end_date='', fundamentals_toget = 'all'
         
 def find_fundamentals(tkr_id, sandbox = False):
     
-        """Returns a list of available fundamental financial indicators for the
+    """
+    Returns a list of available fundamental financial indicators for the
     specified company.
     
     -- tkr_id: stock ticker name. 'AAPL' for Apple inc, 'XOM' for Exxon Mobile Corp. etc.
@@ -180,7 +185,8 @@ def find_fundamentals(tkr_id, sandbox = False):
     -- sandbox: Use this to turn sandbox mode on and off if you have a developers 
         sandbox api key. Limited to DOW 30, but much less strict limits on api calls.
         
-    *In .env file name main key INTRINIO_KEY and developer sandbox key INTRINIO_SANDBOX_KEY"""
+    *In .env file name main key INTRINIO_KEY and developer sandbox key INTRINIO_SANDBOX_KEY
+    """
 
 
     if sandbox == False:
