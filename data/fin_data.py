@@ -356,6 +356,21 @@ class DailyTimeSeries:
 
     
     def add_fundamentals(self, primary_df, fundamentals_list):
+        """
+        Adds fundamentals indicators from quarterly financial reports and
+        merges with the existing dataframe.
+        
+        Parameters
+        ----------
+        
+        primary_df : pandas dataframe
+            dataframe to merge retrieved data with.
+            
+        fundamentals_list : str, list
+            Default 'all' or list of fundamentals to get. Get indicator 
+            names with find_fundamentals('<tickerId>') in fin_data package.
+            (from fin_data import find_fundamentals)
+        """
         
         from fin_data_fundamentals import increment_months
         
