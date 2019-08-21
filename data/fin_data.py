@@ -374,7 +374,7 @@ class DailyTimeSeries:
         
         from fin_data_fundamentals import increment_months
         
-                
+        # Get important dates from primary data frame
         dates_sorted = sorted(primary_df.index, key=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'))
         
         preceding_quarter_date = increment_months(datetime.datetime.strptime(dates_sorted[0], '%Y-%m-%d'), -4).strftime("%Y-%m-%d")
@@ -383,24 +383,32 @@ class DailyTimeSeries:
         after_date = dates_sorted[0]
         
         
-        
+        # Run get_fundamentals function, return results as dataframe
+        # set 'date' as index
         fun_df = get_fundamentals(tkr_id=self.symbol, 
                                   after_date=after_date, 
                                   fundamentals_toget=fundamentals_list, 
                                   sandbox=False, 
-                                  return_df=True).set_index('date')
+                                  return_df=True,
+                                  nocomm=True).set_index('date')
         
         
+        # Get all column names
         columns = primary_df.columns.append(fun_df.columns)
         
+        # Set up interim dataframe
         ntrm_df = primary_df.reindex(columns=primary_df.columns.append(fun_df.columns))
+        
+        # Manual merge. Prevents pandas duplication issues merging.
+        # Regular pandas merge could be done if both indices are converted to datetime
+        # and resulting dataframe index is converted back to string date.
         
         for row in fun_df.iterrows():
             date_qr = row[0]
             for col in row[1].index:
                  ntrm_df.loc[ntrm_df.index == date_qr, col] = row[1][col]
         
-        
+        # Call to get fundamentals for earliest dates to ffill
         before_df = get_fundamentals(tkr_id=self.symbol,
                                      after_date=preceding_quarter_date,
                                      end_date=after_date,
@@ -408,20 +416,24 @@ class DailyTimeSeries:
                                      sandbox=False,
                                      return_df=True
                                     )
+        
+        # If before_df data is available, add to interim df
+        
         if len(before_df) != 0:
             if ntrm_df.iloc[0].isnull().any():
                 for k,v in zip(before_df.iloc[0].index, before_df.iloc[0].values):
                     if k != 'date':
                         ntrm_df.loc[ntrm_df.index == after_date, k] = v
         
+        # Forward fill from publication dates
         ntrm_df = ntrm_df.fillna(method='ffill')
 
         
-          # Print Statement
+        # Print Statement
         print('###################################################################','\n',
         'Ticker: ' , self.symbol, '\n',
-        'Retrieved Data Start Date: ', sorted(fun_df.index, key=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'))[0], '\n',
-        'Retrieved Data End Date: ', before_date, '\n',
+        'Retrieved Data Start Date: ', after_date, '\n',
+        'Retrieved Data End Date: ', sorted(fun_df.index, key=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d')), '\n',
         'Data Retrieved: ', list(fun_df.columns),'\n',
         '###################################################################')
 
