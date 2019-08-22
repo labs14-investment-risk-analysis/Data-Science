@@ -1,60 +1,43 @@
-# Data-Science
-🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline. Feel free to add your own flare to it.
-
-🚫 The numbers 1️⃣ through 5️⃣ next to each item represent the week that part of the docs needs to be comepleted by.  Make sure to delete the numbers by the end of Labs.
-
-🚫 Each student has a required minimum number of meaningful PRs each week per the rubric.  Contributing to docs does NOT count as a PR to meet your weekly requirements.
-
 # Investement Risk Analysis
+
+Welcome to the Data-Science portion of Investment Risk Analysis which   is being developed as part of Lambda School Labs. This README provides an outline on the project, as well as links to further documentation in each sub-section.
 
 ## Contributors
 
 |                                       [Alexander Witt](https://github.com/alex-witt)                                        |                                       [Damerei Jha](https://github.com/damerei)                                        |                                       [Hira Khan](https://github.com/hira63s)                                        |                                       [Joe Bender](https://github.com/jazzathoth)                                        |                                       [Jor Ming Poon](https://github.com/JorPoon)                                        |
 | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: |
-|                      [<img src="https://avatars3.githubusercontent.com/u/43584144?s=460&v=4" width = "200" />](https://avatars3.githubusercontent.com/u/43584144?s=460&v=4)                       |                      [<img src="https://blackswan2.dev/static/dj-82d8405a6cba6dbe74f86e6946b4e211.png" width = "200" />](https://blackswan2.dev/static/dj-82d8405a6cba6dbe74f86e6946b4e211.png)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "200" />](https://github.com/)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "200" />](https://github.com/)                       |                      [<img src="https://https://media.licdn.com/dms/image/C4D03AQHDeAV1fpgPjQ/profile-displayphoto-shrink_800_800/0?e=1571270400&v=beta&t=8iWYOsyquObIJg32ZzKKPVFbkIA26yIYbf4wTt8P6Zc" width = "200" />](https://media.licdn.com/dms/image/C4D03AQHDeAV1fpgPjQ/profile-displayphoto-shrink_800_800/0?e=1571270400&v=beta&t=8iWYOsyquObIJg32ZzKKPVFbkIA26yIYbf4wTt8P6Zc)                       |
+|                      [<img src="./data/img/headshots/Alex.jpg" width = "200" />](https://avatars3.githubusercontent.com/u/43584144?s=460&v=4)                       |                      [<img src="./data/img/headshots/Damerei.png" width = "200" />](https://blackswan2.dev/static/dj-82d8405a6cba6dbe74f86e6946b4e211.png)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "200" />](https://github.com/)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "200" />](https://github.com/)                       |                      [<img src="./data/img/headshots/Jor.jpg" width = "200" />](https://media.licdn.com/dms/image/C4D03AQHDeAV1fpgPjQ/profile-displayphoto-shrink_800_800/0?e=1571270400&v=beta&t=8iWYOsyquObIJg32ZzKKPVFbkIA26yIYbf4wTt8P6Zc)                       |
 |                 [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/alex-witt)                 |            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/damerei)             |           [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/hira63s)            |          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/jazzathoth)           |            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/jorpoon)             |
 | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/alexanderjwitt) |  | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/hira-khan-991b1583/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/joe-bender) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/jor-ming-poon) |
 
 ## Project Overview
 
+The Investment Risk Ratings Project has one overarching goal: to make equities investing simpler and safer by accurately assessing what the market factors that contribute to the risk of investing in a given company are. All investors, from the retail investor to the professional hedge fund manager, are faced with the daunting task of assimilating a forbiddingly vast amount of information that is changing on a daily basis, a cognitive demand that no one can master.
+
+By systematically breaking down the movement of a company’s stock price into its constituent factors - whether macroeconomic, technical, or fundamental - we can help diminish the overwhelming complexity of the investment process, and in turn make investing both a safer and more rational process.
 
 [Trello Board](https://trello.com/b/tFRkI9A8/investment-risk-analysis)
 
 [Product Canvas](https://www.notion.so/Investment-Risk-Analysis-a2ccc59778074d849bbd37449b6c1c38)
 
-The Investment Risk Ratings Project has one overarching goal: to make equities investing simpler and safer by accurately assessing what the market factors that contribute to the risk of investing in a given company are. All investors, from the retail investor to the professional hedge fund manager, are faced with the daunting task of assimilating a forbiddingly vast amount of information that is changing on a daily basis, a cognitive demand that no one can master.
-
-By systematically breaking down the movement of a company’s stock price into its constituent factors - whether macroeconomic, technical, or fundamental - we can help diminish the overwhelming complexity of the investment process, and in turn make investing both a safer and more rational process.
 
 ### Tech Stack
 
-Pandas 
+This is a Python 3 product. Data is acquired via Quandl, Intrinio and Alpha Vantage and manipulated using Pandas. Machine Learning frameworks include Sci-kit learn, Tensorflow, and Keras. 
 
-Sci-kit learn
+Deep Learning with Keras and TensorFlow
 
-Tensorflow
-
-Pytorch
-
-Keras 
-
-Statsmodels.tsa
-
-rpy2
-
-Pyflux
-
-### 2️⃣ Predictions
+### Predictions
 
 Coming Soon
 
-### 2️⃣ Explanatory Variables
+### Explanatory Variables
 
--   Explanatory Variable 1
--   Explanatory Variable 2
--   Explanatory Variable 3
--   Explanatory Variable 4
--   Explanatory Variable 5
+-   Equities Pricing
+-   Index Pricing
+-   Macroeconomic Indicators
+-   Technical Indicators
+-   Company Fundamentals
 
 ### Data Sources
 
@@ -67,7 +50,7 @@ Coming Soon
 [Python Notebooks](https://github.com/labs14-investment-risk-analysis/Data-Science/tree/master/jupyter_notebooks)
 ### How to connect to the web API
 
-There currently is no web API. 
+There currently is no web API.
 
 ### How to connect to the data API
 
@@ -112,4 +95,3 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 ## Documentation
 
 See [fin_data](https://github.com/labs14-investment-risk-analysis/Data-Science/blob/master/data/README.md) for details on the data ingestion engine.
-
