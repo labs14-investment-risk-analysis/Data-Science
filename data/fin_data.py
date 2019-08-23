@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import quandl
 import datetime
+import warnings
 
 #pylint: disable=invalid-sequence-index
 #pylint: disable=no-member
@@ -227,12 +228,12 @@ class DailyTimeSeries:
             'Data Retrieved: ', meta_data['3: Last Refreshed'],'\n',
             '###################################################################')
 
-            # Rename Column
-            c_name = str(data.columns[0])
-            data = data.rename(columns={
-                c_name : symbol+'_'+c_name
-            }
-        )
+            # Rename Columns
+            for column in data.columns:
+                data = data.rename(columns={
+                    column : symbol+'_'+column
+                }
+            )
             # Merge
             if i_count == 0:
                 final_df = primary_df.merge(data,
