@@ -69,7 +69,7 @@ This example object will focus on Apple, so that when you call other fundamnetal
 
     df = apple.initiate()
 
-![inital dataframe](./img/init_df.png)
+![inital dataframe](./img/readme_img/init_df.png)
 
 From here, you can judiciously add other financial information to your dataframe.
 
@@ -87,7 +87,7 @@ the existing dataframe. Only accepts a list of securities. Requires two paramete
     df = apple.add_securities(symbols=new_symbols,
                               primary_df=df)
 
-![limited security dataframe](./img/sec_df.png)
+![limited security dataframe](./img/readme_img/sec_df.png)
 
 ### add_technicals()
 
@@ -98,7 +98,7 @@ Adds technical indicators from a list of securities and merges that data with th
     df = apple.add_technicals(tech_symbols=techs,
                               primary_df=df)
 
-![limited technicals dataframe](./img/tech_df.png)
+![limited technicals dataframe](./img/readme_img/tech_df.png)
 
 Below is a table of Technical Indicators and the associated abbreviations to be used when calling the **_add_technicals()_** method. Further information can be found [here](https://www.alphavantage.co/documentation/).
 
@@ -168,7 +168,7 @@ data with the existing dataframe. Requires two parameters, **a list of macroecon
     df = apple.add_macro(primary_df=df, 
                          indices=indices)
 
-![limited macro dataframe](./img/macro_df.png)
+![limited macro dataframe](./img/readme_img/macro_df.png)
 
 | Macroeconomic Indicator | API Input text | Indicator Description  
 | --------------------| ------------ | ------------ |
@@ -186,7 +186,7 @@ The available fundamentals differ by company, so a standaridzed list will work. 
 
     apple.list_available_fundamentals()
 
-![available_fundamnetals](./img/avail_fund.png)
+![available_fundamnetals](./img/readme_img/avail_fund.png)
 
 It is best practice to view the results before passing the whole list into the add_fundamentals method. In some cases, the API returns a nested list as above.
 
@@ -197,5 +197,5 @@ It is best practice to view the results before passing the whole list into the a
     apple.add_fundamentals(primary_df=df, 
                            fundamentals_list=fund_list)
 
-![limited_fundamental_dataframe](./img/funds_df.png)
+![limited_fundamental_dataframe](./img/readme_img/funds_df.png)
 
