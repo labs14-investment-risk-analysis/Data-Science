@@ -1,4 +1,5 @@
 from decouple import config
+from time import sleep
 import intrinio_sdk
 from intrinio_sdk.rest import ApiException
 import numpy as np 
@@ -37,7 +38,11 @@ def increment_months(orig_date, inc):
     return orig_date.replace(year=new_year, month=new_month, day=new_day)
 
 
-def get_fundamentals(tkr_id, after_date, end_date='', fundamentals_toget = 'all', sandbox=False, return_df=False, nocomm=False):
+def get_fundamentals(tkr_id,
+                     after_date,
+                     end_date='',
+                     fundamentals_toget = 'all',
+                     sandbox=False):
 
     """
     Get fundamentals indicators from the intrinio api. Returns intrinio's standardized
@@ -67,6 +72,86 @@ def get_fundamentals(tkr_id, after_date, end_date='', fundamentals_toget = 'all'
     *In .env file name main key INTRINIO_KEY and developer sandbox key INTRINIO_SANDBOX_KEY
     """
 
+    available_data = get_intrinio_fids(tkr_id=tkr_id,
+                     after_date=after_date,
+                     end_date=end_date,
+                     sandbox=sandbox)
+
+    qtrs = ['Q1', 'Q2', 'Q3', 'Q4']
+    income_statements = []
+
+    # Sort for income statements from quarterly reports
+    # Note: sorting for income statements is also done in api call
+    # but am leaving it here in case of irregularities
+
+    for report in available_data:
+        if (report.statement_code == 'income_statement') & (report.fiscal_period in qtrs):
+            income_statements.append(report)
+
+    fids_list = []
+    for report in income_statements:
+        fids_list.append(report.id)
+
+    fund_dict = fundamentals_from_fids(fids_list=fids_list, sandbox=sandbox)
+
+    # Reformat the dictionary for easy conversion to dataframe
+    temp_dict = {}
+
+    # Check which fundamentals to return. 'all' returns all available
+    #funs_available = fund_dict[first_fun[0]].keys()
+    #print(first_fun)
+    if fundamentals_toget == 'all':
+        # Format by adding ticker id to fundamental name
+        # for all columns except date
+        list_fun_toget = find_fundamentals(tkr_id=tkr_id,
+                                           sandbox=sandbox,
+                                           nocomm=True)
+        for fun in list_fun_toget:
+            if fun != 'date':
+                temp_dict[str(tkr_id + '_' + fun)] = []
+    else:
+        # Same if list of fundamentals is used.
+        for fun in fundamentals_toget:
+            if fun != 'date':
+                temp_dict[tkr_id + '_' + fun] = []
+    # Add date to dictionary
+    if 'date' not in temp_dict.keys():
+        temp_dict['date'] = []
+
+    # Most companies only make yearly reports for Q4, so fill in
+    # first date if missing.
+    # if fund_dict[list(fund_dict.keys())[0]]['date'] == None:
+    #     fund_dict[list(fund_dict.keys())[0]]['date'] = increment_months(
+    #         fund_dict[list(fund_dict.keys())[1]]['date'], -3)
+
+
+    for fun_key in fund_dict.keys():
+
+        # Populate dictionary, filling in date if it is missing
+        # with date 3 months after previous date
+        for fun in temp_dict.keys():
+            # 'date' needs to be handled differently than other columns
+            if fun != 'date':
+                temp_dict[fun].append(fund_dict[fun_key][fun.split('_')[1]]
+                                      if fun.split('_')[1]
+                                      in list(fund_dict[fun_key].keys())
+                                      else 0)
+            elif fun == 'date':
+                temp_dict[fun].append(fund_dict[fun_key][fun].strftime("%Y-%m-%d")
+                                       if fund_dict[fun_key]['date'] != None
+                                       else increment_months(previous_date, 3)
+                                      .strftime("%Y-%m-%d"))
+                previous_date = fund_dict[fun_key]['date']
+    return_df = pd.DataFrame(temp_dict)
+    # if nocomm == True:
+    #     if (str(tkr_id + '_quarter' in return_df.columns)):
+    #         return_df = return_df.drop(labels=('{}_quarter'.format(tkr_id)))
+    #     if (str(tkr_id +  '_fiscal_year') in return_df.columns):
+    #         return_df = return_df.drop(labels=('{}_fiscal_year'.format(tkr_id)))
+    return(return_df)
+
+
+def fundamentals_from_fids(fids_list, sandbox=False):
 
     if sandbox == False:
         intrinio_sdk.ApiClient().configuration.api_key['api_key'] = config('INTRINIO_KEY')
@@ -78,61 +163,18 @@ def get_fundamentals(tkr_id, after_date, end_date='', fundamentals_toget = 'all'
         security_api = intrinio_sdk.SecurityApi()
 
     # Initialize api's
-    capi = intrinio_sdk.CompanyApi()
     fapi = intrinio_sdk.FundamentalsApi()
 
-    fund_params = {
-        'identifier'     : tkr_id,
-        'filed_after'    : '',
-        'filed_before'   : '',
-        'reported_only'  : False,
-    #     'fiscal_year'  : fiscal_year,
-        'statement_code' : 'income_statement',
-        'type'           : '',
-        'start_date'     : after_date,
-        'end_date'       : '',
-        'page_size'      : 500,
-        'next_page'      : ''
-    }
-    
-    
-    # Set up dictionary to populate with financial report availibility information
-    
-    fundamentals = capi.get_company_fundamentals(**fund_params)
-    id_dict = {
-        "start_date"     : [],
-        "end_date"       : [],
-        "fiscal_year"    : [],
-        "fiscal_period"  : [],
-        "id"             : [],
-        "statement_code" : [],
-    }
-
-    # Populate availability dataframe
-    
-    for i in np.arange(len(fundamentals.fundamentals)):
-        id_dict['start_date'].append(fundamentals.fundamentals[i].start_date)
-        id_dict['end_date'].append(fundamentals.fundamentals[i].end_date) 
-        id_dict['fiscal_year'].append(fundamentals.fundamentals[i].fiscal_year)
-        id_dict['fiscal_period'].append(fundamentals.fundamentals[i].fiscal_period)
-        id_dict['id'].append(fundamentals.fundamentals[i].id)
-        id_dict['statement_code'].append(fundamentals.fundamentals[i].statement_code)
-
-    id_df = pd.DataFrame.from_dict(id_dict)
-
-    # Sort for income statements from quarterly reports 
-    # Note: sorting for income statements is also done in api call
-    # but am leaving it here in case of irregularities
-    qtrs = ['Q1', 'Q2', 'Q3', 'Q4']
-    income_statements = (id_df.loc[(id_df['statement_code'] == 'income_statement') &
-                                   (id_df['fiscal_period'].isin(qtrs)==True)]
-                         .sort_values(by='start_date'))
-
-    # Using financial report ids (id_dict['id']), get fundamentals information
-    # and add to a dictionary
     fund_dict = {}
-    for row in income_statements.iterrows():
-        fundamentals_ret = fapi.get_fundamental_standardized_financials(row[1]['id'])
+    for id in fids_list:
+        for attempt in range(5):
+            try:
+                fundamentals_ret = fapi.get_fundamental_standardized_financials(id)
+            except:
+                print('Connection error. Retry attempt {}'.format(attempt))
+                sleep(2)
+            else:
+                break
         fund_get = fundamentals_ret.standardized_financials_dict
         fund_info = fundamentals_ret.fundamental_dict
         funds = {}
@@ -141,62 +183,58 @@ def get_fundamentals(tkr_id, after_date, end_date='', fundamentals_toget = 'all'
         funds['quarter'] = fund_info['fiscal_period']
         for f in fund_get:
             funds[f['data_tag']['tag'].lower()] = f['value']
-        fund_dict[row[1]['id']] = funds
+        fund_dict[id] = funds
+    return fund_dict
 
-    # Return dictionary if selected. Otherwise format to dataframe
-    if return_df == False:
-        return(fund_dict)
-    elif return_df == True:
-        
-        # Reformat the dictionary for easy conversion to dataframe
-        temp_dict = {}
+def get_intrinio_fids(tkr_id,
+                     after_date,
+                     end_date='',
+                     sandbox=False):
+    if sandbox == False:
+        intrinio_sdk.ApiClient().configuration.api_key['api_key'] = config('INTRINIO_KEY')
 
-        # Check which fundamentals to return. 'all' returns all available
-        if fundamentals_toget == 'all':
-            # Format by adding ticker id to fundamental name
-            # for all columns except date
-            for fun in fund_dict[list(fund_dict.keys())[0]].keys():
-                if fun != 'date':
-                    temp_dict[str(tkr_id + '_' + fun)] = []
+        security_api = intrinio_sdk.SecurityApi()
+    elif sandbox == True:
+        intrinio_sdk.ApiClient().configuration.api_key['api_key'] = config('INTRINIO_SANDBOX_KEY')
+
+        security_api = intrinio_sdk.SecurityApi()
+
+    # Initialize api's
+    capi = intrinio_sdk.CompanyApi()
+
+    capi_params = {
+        'identifier'     : tkr_id,
+        'filed_after'    : '',
+        'filed_before'   : '',
+        'reported_only'  : False,
+    #     'fiscal_year'  : fiscal_year,
+        'statement_code' : 'income_statement',
+        'type'           : 'QTR',
+        'start_date'     : after_date,
+        'end_date'       : end_date,
+        'page_size'      : 500,
+        'next_page'      : ''
+    }
+
+
+    # Set up dictionary to populate with financial report availibility information
+    for attempt in range(5):
+        try:
+            fundamentals = capi.get_company_fundamentals(**capi_params)
+        except:
+            print("There was a server error. Retrying, attempt {}.".format(attempt))
+            sleep(5)
         else:
-            # Same if list of fundamentals is used.
-            for fun in fundamentals_toget:
-                if fun != 'date':
-                    temp_dict[tkr_id + '_' + fun] = []
-        # Add date to dictionary
-        temp_dict['date'] = []
+            break
+    # n_results = len(fundamentals.fundamentals)
+    # for i in range(n_results):
+    #     if fundamentals.fundamentals[i].filing_date != None:
+    #         fundamentals.fundamentals[i].filing_date = fundamentals.fundamentals[i].filing_date.strftime('%Y-%m-%d')
 
-        # Most companies only make yearly reports for Q4, so fill in 
-        # first date if missing.
-        if fund_dict[list(fund_dict.keys())[0]]['date'] == None:
-            fund_dict[list(fund_dict.keys())[0]]['date'] = increment_months(
-                fund_dict[list(fund_dict.keys())[1]]['date'], -3)
+    return(fundamentals.fundamentals)
 
-        for fun_key in fund_dict.keys():
-
-            # Populate dictionary, filling in date if it is missing 
-            # with date 3 months after previous date
-            for fun in temp_dict.keys():
-                # 'date' needs to be handled differently than other columns
-                if fun != 'date':
-                    temp_dict[fun].append(fund_dict[fun_key][fun.split('_')[1]]
-                                          if fun.split('_')[1] 
-                                          in list(fund_dict[fun_key].keys()) 
-                                          else 0)
-                elif fun == 'date':
-                    temp_dict[fun].append(fund_dict[fun_key][fun].strftime("%Y-%m-%d")
-                                           if fund_dict[fun_key]['date'] != None
-                                           else increment_months(previous_date, 3)
-                                          .strftime("%Y-%m-%d"))
-                    previous_date = fund_dict[fun_key]['date']
-        return_df = pd.DataFrame(temp_dict)
-        if nocomm == True:
-            return_df = return_df.drop(labels=['fiscal_year', 'quarter'])
-        return(return_df)
         
-        
-        
-def find_fundamentals(tkr_id, sandbox = False):
+def find_fundamentals(tkr_id, sandbox = False, nocomm=False):
     
     """
     Returns a list of available fundamental financial indicators for the
@@ -252,7 +290,11 @@ def find_fundamentals(tkr_id, sandbox = False):
     # Make list of available fundamentals and add above
     for fun in fun_check.standardized_financials:
         available_fun.append(fun.data_tag.tag)
-    available_fun.append(common)
+    if nocomm == False:
+        for fun in common:
+            available_fun.append(fun)
+    else:
+        available_fun.append('date')
     return(available_fun)
     
 

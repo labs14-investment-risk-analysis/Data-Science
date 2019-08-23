@@ -272,7 +272,7 @@ class DailyTimeSeries:
         i_count = 0
         for i in indices:
 
-            data = quandl.get(i,
+            data = quandl.get(str(index_dict[i]),
                               authtoken=self.quandl_key)
             data.index.name = 'date'
             start_date = data.index.min() - pd.DateOffset(day=1)
@@ -413,12 +413,10 @@ class DailyTimeSeries:
 
         # Run get_fundamentals function, return results as dataframe
         # set 'date' as index
-        fun_df = get_fundamentals(tkr_id=self.symbol, 
+        fun_df = get_fundamentals(tkr_id=symbol, 
                                   after_date=after_date, 
                                   fundamentals_toget=fundamentals_list, 
-                                  sandbox=False, 
-                                  return_df=True,
-                                  nocomm=True).set_index('date')
+                                  sandbox=False).set_index('date')
         
         
         # Get all column names
@@ -441,8 +439,7 @@ class DailyTimeSeries:
                                      after_date=preceding_quarter_date,
                                      end_date=after_date,
                                      fundamentals_toget=fundamentals_list,
-                                     sandbox=False,
-                                     return_df=True
+                                     sandbox=False
                                     )
         
         # If before_df data is available, add to interim df
@@ -454,7 +451,7 @@ class DailyTimeSeries:
                         ntrm_df.loc[ntrm_df.index == after_date, k] = v
         
         # Forward fill from publication dates
-        ntrm_df = ntrm_df.fillna(method='ffill')
+        ntrm_df = ntrm_df.fillna(method='bfill')
         
         # Print Statement
         print('###################################################################','\n',
@@ -466,8 +463,8 @@ class DailyTimeSeries:
         # Print Statement
         print('###################################################################','\n',
         'Ticker: ' , self.symbol, '\n',
-        'Retrieved Data Start Date: ', after_date, '\n',
-        'Retrieved Data End Date: ', sorted(fun_df.index, key=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d')), '\n',
+        'Retrieved Data Start Date: ', sorted(fun_df.index, key=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'))[0], '\n',
+        'Retrieved Data End Date: ', sorted(fun_df.index, key=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'))[-1], '\n',
         'Data Retrieved: ', list(fun_df.columns),'\n',
         '###################################################################')
 
