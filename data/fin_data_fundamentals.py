@@ -172,6 +172,7 @@ def fundamentals_from_fids(fids_list, sandbox=False):
                 fundamentals_ret = fapi.get_fundamental_standardized_financials(id)
             except:
                 print('Connection error. Retry attempt {}'.format(attempt))
+                sleep(2)
             else:
                 break
         fund_get = fundamentals_ret.standardized_financials_dict
