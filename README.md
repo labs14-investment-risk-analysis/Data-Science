@@ -1,101 +1,66 @@
-# Data-Science
-🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline. Feel free to add your own flare to it.
+# Investement Risk Analysis
 
-🚫 The numbers 1️⃣ through 5️⃣ next to each item represent the week that part of the docs needs to be comepleted by.  Make sure to delete the numbers by the end of Labs.
+Welcome to the Data-Science portion of Investment Risk Analysis which   is being developed as part of Lambda School Labs. This README provides an outline on the project, as well as links to further documentation in each sub-section.
 
-🚫 Each student has a required minimum number of meaningful PRs each week per the rubric.  Contributing to docs does NOT count as a PR to meet your weekly requirements.
+## Contributors
 
-# 1️⃣ Title of project goes here
-
-You can find the project at [🚫URL NAME GOES HERE](🚫copy and paste URL here).
-
-## 5️⃣ Contributors
-
-🚫Add contributor info below, make sure add images and edit the social links for each member. Add to or delete these place-holders as needed
-
-|                                       [Student 1](https://github.com/)                                        |                                       [Student 2](https://github.com/)                                        |                                       [Student 3](https://github.com/)                                        |                                       [Student 4](https://github.com/)                                        |                                       [Student 5](https://github.com/)                                        |
+|                                       [Alexander Witt](https://github.com/alex-witt)                                        |                                       [Damerei Jha](https://github.com/damerei)                                        |                                       [Hira Khan](https://github.com/hira63s)                                        |                                       [Joe Bender](https://github.com/jazzathoth)                                        |                                       [Jor Ming Poon](https://github.com/JorPoon)                                        |
 | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: |
-|                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "200" />](https://github.com/)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "200" />](https://github.com/)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "200" />](https://github.com/)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "200" />](https://github.com/)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "200" />](https://github.com/)                       |
-|                 [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/)                 |            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/honda0306)             |           [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/Mister-Corn)            |          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/NandoTheessen)           |            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/wvandolah)             |
-| [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/) |
-
-
-
-🚫 5️⃣ Optional examples of using images with links for your tech stack, make sure to change these to fit your project
-
-![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)
-![Typescript](https://img.shields.io/npm/types/typescript.svg?style=flat)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/b5c4db1c-b10d-42c3-b157-3746edd9e81d/deploy-status)](netlify link goes in these parenthesis)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-
-🚫 more info on using badges [here](https://github.com/badges/shields)
+|                      [<img src="./data/img/headshots/Alex.jpg" width = "200" />](https://avatars3.githubusercontent.com/u/43584144?s=460&v=4)                       |                      [<img src="./data/img/headshots/Damerei.png" width = "200" />](https://blackswan2.dev/static/dj-82d8405a6cba6dbe74f86e6946b4e211.png)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "200" />](https://github.com/)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "200" />](https://github.com/)                       |                      [<img src="./data/img/headshots/Jor.jpg" width = "200" />](https://media.licdn.com/dms/image/C4D03AQHDeAV1fpgPjQ/profile-displayphoto-shrink_800_800/0?e=1571270400&v=beta&t=8iWYOsyquObIJg32ZzKKPVFbkIA26yIYbf4wTt8P6Zc)                       |
+|                 [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/alex-witt)                 |            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/damerei)             |           [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/hira63s)            |          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/jazzathoth)           |            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/jorpoon)             |
+| [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/alexanderjwitt) |  | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/hira-khan-991b1583/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/joe-bender) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/jor-ming-poon) |
 
 ## Project Overview
 
+The Investment Risk Ratings Project has one overarching goal: to make equities investing simpler and safer by accurately assessing what the market factors that contribute to the risk of investing in a given company are. All investors, from the retail investor to the professional hedge fund manager, are faced with the daunting task of assimilating a forbiddingly vast amount of information that is changing on a daily basis, a cognitive demand that no one can master.
 
-1️⃣ [Trello Board](🚫add link to trello board here)
+By systematically breaking down the movement of a company’s stock price into its constituent factors - whether macroeconomic, technical, or fundamental - we can help diminish the overwhelming complexity of the investment process, and in turn make investing both a safer and more rational process.
 
-1️⃣ [Product Canvas](🚫add link to product canvas here)
+[Trello Board](https://trello.com/b/tFRkI9A8/investment-risk-analysis)
 
-🚫 Replace lorem ipsum with a description of your project
+[Product Canvas](https://www.notion.so/Investment-Risk-Analysis-a2ccc59778074d849bbd37449b6c1c38)
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-🚫  delete if front end is not applicable to your project
-
-1️⃣ [Deployed Front End](🚫add link to deployed app here)
 
 ### Tech Stack
 
-🚫 List all of the languages, frameworks, services, etc used here.
+This is a Python 3 product. Data is acquired via Quandl, Intrinio and Alpha Vantage and manipulated using Pandas. Machine Learning frameworks include Sci-kit learn, Tensorflow, and Keras. 
 
-### 2️⃣ Predictions
+Deep Learning with Keras and TensorFlow
 
-🚫 Describe your models here
+### Predictions
 
-### 2️⃣ Explanatory Variables
+Coming Soon
 
--   Explanatory Variable 1
--   Explanatory Variable 2
--   Explanatory Variable 3
--   Explanatory Variable 4
--   Explanatory Variable 5
+### Explanatory Variables
+
+-   Equities Pricing
+-   Index Pricing
+-   Macroeconomic Indicators
+-   Technical Indicators
+-   Company Fundamentals
 
 ### Data Sources
-🚫  Add to or delete souce links as needed for your project
 
-
--   [Source 1] (🚫add link to python notebook here)
--   [Source 2] (🚫add link to python notebook here)
--   [Source 3] (🚫add link to python notebook here)
--   [Source 4] (🚫add link to python notebook here)
--   [Source 5] (🚫add link to python notebook here)
+-   [Alpha Vantage API] (https://www.alphavantage.co/documentation/)
+-   [Intrinio API] (https://docs.intrinio.com/documentation/python)
+-   [Quandl API] (https://www.quandl.com/)
 
 ### Python Notebooks
 
-🚫  Add to or delete python notebook links as needed for your project
+[Python Notebooks](https://github.com/labs14-investment-risk-analysis/Data-Science/tree/master/jupyter_notebooks)
+### How to connect to the web API
 
-[Python Notebook 1](🚫add link to python notebook here)
+There currently is no web API.
 
-[Python Notebook 2](🚫add link to python notebook here)
+### How to connect to the data API
 
-[Python Notebook 3](🚫add link to python notebook here)
-
-### 3️⃣ How to connect to the web API
-
-🚫 List directions on how to connect to the API here
-
-### 3️⃣ How to connect to the data API
-
-🚫 List directions on how to connect to the API here
+The API is not yet deployed. This field will be updated when this changes
 
 ## Contributing
 
 When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
 
-Please note we have a [code of conduct](./code_of_conduct.md.md). Please follow it in all your interactions with the project.
+Please note we have a [code of conduct](./code_of_conduct.md). Please follow it in all your interactions with the project.
 
 ### Issue/Bug Request
 
@@ -129,6 +94,4 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-See [Backend Documentation](_link to your backend readme here_) for details on the backend of our project.
-
-See [Front End Documentation](_link to your front end readme here_) for details on the front end of our project.
+See [fin_data](https://github.com/labs14-investment-risk-analysis/Data-Science/blob/master/data/README.md) for details on the data ingestion engine.
