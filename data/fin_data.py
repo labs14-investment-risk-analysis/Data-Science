@@ -111,7 +111,7 @@ class DailyTimeSeries:
         ts = TimeSeries(key=self.alpha_vantage_key,
                         output_format='pandas')
         # API Call
-        data, meta_data = ts.get_daily(symbol=self.symbol,
+        data, meta_data = ts.get_daily_adjusted(symbol=self.symbol,
                                        outputsize=self.outputsize)
 
         # Print Statement
@@ -130,6 +130,9 @@ class DailyTimeSeries:
                 '5. volume': self.symbol+' volume'
         }
     )
+        data = data.sort_values(by='date',
+                                ascending=True)
+        
         return data
 
     def add_securities(self, symbols, primary_df):
@@ -153,7 +156,7 @@ class DailyTimeSeries:
         i_count = 0
         for symbol in symbols:
 
-            data, meta_data = ts.get_daily(symbol=symbol,
+            data, meta_data = ts.get_daily_adjusted(symbol=symbol,
                                            outputsize=self.outputsize)
 
             # Print Statement
