@@ -222,8 +222,6 @@ class DailyTimeSeries:
         for ind in new_indicators:
 
             data, meta_data = getattr(ti, ind)(symbol=symbol)
-            
-            data = data.drop(columns='8. split coefficient')
 
             # Print Statement
             print('###################################################################','\n',
