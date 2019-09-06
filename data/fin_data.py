@@ -111,8 +111,10 @@ class DailyTimeSeries:
         ts = TimeSeries(key=self.alpha_vantage_key,
                         output_format='pandas')
         # API Call
-        data, meta_data = ts.get_daily(symbol=self.symbol,
+        data, meta_data = ts.get_daily_adjusted(symbol=self.symbol,
                                        outputsize=self.outputsize)
+        
+        data = data.drop(columns='8. split coefficient')
 
         # Print Statement
         print('###################################################################','\n',
@@ -121,15 +123,16 @@ class DailyTimeSeries:
         'Data Retrieved: ', meta_data['1. Information'],'\n',
         '###################################################################')
 
-        # Produce better column names
-        data = data.rename(columns={
-                '1. open'  : self.symbol+' open',
-                '2. high'  : self.symbol+' high',
-                '3. low'   : self.symbol+' low',
-                '4. close' : self.symbol+' close',
-                '5. volume': self.symbol+' volume'
-        }
-    )
+        for column in data.columns:
+            stripped_column = column[3:].replace(" ", '_')
+            data = data.rename(columns={
+                column : self.symbol+'_'+stripped_column
+            }
+        )
+
+        data = data.sort_values(by='date',
+                                ascending=True)
+        
         return data
 
     def add_securities(self, symbols, primary_df):
@@ -153,7 +156,7 @@ class DailyTimeSeries:
         i_count = 0
         for symbol in symbols:
 
-            data, meta_data = ts.get_daily(symbol=symbol,
+            data, meta_data = ts.get_daily_adjusted(symbol=symbol,
                                            outputsize=self.outputsize)
 
             # Print Statement
@@ -163,15 +166,14 @@ class DailyTimeSeries:
             'Data Retrieved: ', meta_data['1. Information'],'\n',
             '###################################################################')
 
-            # Give the columns a better name
-            data = data.rename(columns={
-                    '1. open'  : symbol+' open',
-                    '2. high'  : symbol+' high',
-                    '3. low'   : symbol+' low',
-                    '4. close' : symbol+' close',
-                    '5. volume': symbol+' volume'
-            }
-        )
+            # Rename Columns
+            for column in data.columns:
+                stripped_column = column[3:].replace(" ", '_')
+                data = data.rename(columns={
+                    column : symbol+'_'+stripped_column
+                }
+            )
+
             # Merge Dataframes
             if i_count == 0:
                 final_df = primary_df.merge(data,
