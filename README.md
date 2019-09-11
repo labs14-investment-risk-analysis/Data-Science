@@ -23,7 +23,7 @@ By systematically breaking down the movement of a company’s stock price into i
 
 ### Tech Stack
 
-This is a Python 3 product. Data is acquired via Quandl, Intrinio and Alpha Vantage and manipulated using Pandas. Machine Learning frameworks include Sci-kit learn, Tensorflow, and Keras. 
+This is a Python 3 product. Data is acquired via Quandl, Intrinio and Alpha Vantage and manipulated using Pandas. Machine Learning frameworks include Sci-kit learn, Tensorflow, and Keras.
 
 Deep Learning with Keras and TensorFlow
 
@@ -94,4 +94,4 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-See [fin_data](https://github.com/labs14-investment-risk-analysis/Data-Science/blob/master/data/README.md) for details on the data ingestion engine.
+See the [README](https://github.com/labs14-investment-risk-analysis/Data-Science/blob/master/data/README.md) in the `data` directory for details on the modules produces during research and development. 
