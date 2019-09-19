@@ -144,5 +144,5 @@ dependencies:
   - pip:
     - alpha-vantage==2.1.0
     - intrinio-sdk==4.0.0
-#prefix: /home/joe2/anaconda3/envs/riskylobster
+#prefix: /home/joe/PythonRoot/anaconda3/envs/riskylobster
 

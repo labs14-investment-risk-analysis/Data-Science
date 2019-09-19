@@ -282,7 +282,7 @@ class DailyTimeSeries:
             dates = pd.date_range(start_date, end_date, freq = 'D')
             dates.name = 'date'
             data = data.reindex(dates, method = 'ffill')
-            data.index = data.index.astype(str)
+            #data.index = data.index.astype(str)
 
         # Elif statements for changing the column names
 
@@ -405,10 +405,10 @@ class DailyTimeSeries:
         from fin_data_fundamentals import increment_months
         
         # Get important dates from primary data frame
-        dates_sorted = sorted(primary_df.index, key=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'))
+        dates_sorted = primary_df.index
         
-        preceding_quarter_date = increment_months(datetime.datetime.strptime(dates_sorted[0], '%Y-%m-%d'), -4).strftime("%Y-%m-%d")
-        
+        #preceding_quarter_date = increment_months(datetime.datetime.strptime(dates_sorted[0], '%Y-%m-%d'), -4).strftime("%Y-%m-%d")
+        preceding_quarter_date = increment_months(dates_sorted[0], -4)
         before_date = dates_sorted[-1]
         after_date = dates_sorted[0]
 

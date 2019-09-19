@@ -123,10 +123,12 @@ def get_fundamentals(tkr_id,
     # if fund_dict[list(fund_dict.keys())[0]]['date'] == None:
     #     fund_dict[list(fund_dict.keys())[0]]['date'] = increment_months(
     #         fund_dict[list(fund_dict.keys())[1]]['date'], -3)
-
+    prev_date_assigned = False
 
     for fun_key in fund_dict.keys():
-
+        if prev_date_assigned == False:
+            if fund_dict[fun_key]['date'] == None:
+                fund_dict[fun_key]['date'] = after_date
         # Populate dictionary, filling in date if it is missing
         # with date 3 months after previous date
         for fun in temp_dict.keys():
@@ -142,6 +144,7 @@ def get_fundamentals(tkr_id,
                                        else increment_months(previous_date, 3)
                                       .strftime("%Y-%m-%d"))
                 previous_date = fund_dict[fun_key]['date']
+                prev_date_assigned = True
     return_df = pd.DataFrame(temp_dict)
     # if nocomm == True:
     #     if (str(tkr_id + '_quarter' in return_df.columns)):
