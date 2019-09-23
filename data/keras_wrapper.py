@@ -7,9 +7,10 @@ import types
 
 
 class KerasRegressorGenerator(KerasRegressor):
-    """Use parameters: 'seq_length', 'batch_size', and 'epochs' in param_grid along with model parameters"""
+    """Use parameters: 'seq_length', 'batch_size', and 'epochs' in param_grid along with model parameters
+    pass in validation data with 'val_data': {'X':X_val, 'y':y_val} """
 
-    def fit(self, X, y **kwargs):
+    def fit(self, X, y, **kwargs):
         # taken from keras.wrappers.scikit_learn.KerasClassifier.fit ###################################################
         if self.build_fn is None:
             self.model = self.__call__(**self.filter_sk_params(self.__call__))
@@ -24,16 +25,21 @@ class KerasRegressorGenerator(KerasRegressor):
 
         ################################################################################################################
 
-        train_data_generator = self.create_gens(X_train, y_train, seq_length=self.sk_params['seq_length'],
-                                                    batch_size=self.sk_params['batch_size'])
+        train_data_generator = self.create_gens(X, y, seq_length=self.sk_params['seq_length'],
+                                                batch_size=self.sk_params['batch_size'])
 
-        if 'val' in kwargs:
+        if 'val_data' in kwargs:
+
+            val_data_generator = self.create_gens(kwargs['val_data']['X'],
+                                                  kwargs['val_data']['y'],
+                                                  seq_length=self.sk_params['seq_length'],
+                                                  batch_size=self.sk_params['batch_size'])
 
             early_stopping = EarlyStopping( patience=5, verbose=5, mode="auto", restore_best_weights=True)
-            model_checkpoint = ModelCheckpoint("results/best_weights.{epoch:02d}-{loss:.5f}.hdf5", verbose=5,
+            model_checkpoint = ModelCheckpoint("results/best_weights.{epoch:02d}-{val_loss:.2f}.hdf5", verbose=5,
                                                save_best_only=True, mode="auto")
         else:
-            val_gen = None
+            val_data_generator = None
             early_stopping = EarlyStopping(monitor="acc", patience=3, verbose=5, mode="auto", restore_best_weights=True)
             model_checkpoint = ModelCheckpoint("results/best_weights.{epoch:02d}-{loss:.5f}.hdf5", monitor="acc",
                                                verbose=5, save_best_only=True, mode="auto")
@@ -43,9 +49,9 @@ class KerasRegressorGenerator(KerasRegressor):
         epochs = self.sk_params['epochs'] if 'epochs' in self.sk_params else 100
 
         self.__history = self.model.fit_generator(
-            train_gen,
+            train_data_generator,
             epochs=epochs,
-            validation_data=val_gen,
+            validation_data=val_data_generator,
             callbacks=callbacks
         )
 
