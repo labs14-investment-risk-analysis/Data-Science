@@ -62,19 +62,32 @@ class ModelMaker:
         self.y_test = None
         self.y_val = None
 
-
-    def create_model(self, lstm_layers=[361, 196, 81, 64],
+    def create_model(self, seq_length,
+                     batch_size,
+                     epochs,
+                     lstm_layers=[361, 196, 81, 64],
                      dropouts=[0.2, 0.2, 0.2, 0.2],
                      l_rate=0.015,
                      p=0.01,
                      decay=0.0001,
                      # optimizer,
-                     loss='mean_squared_logarithmic_error'):
+                     loss='mean_squared_logarithmic_error'
+                     ):
 
         model = Sequential()
-        for n_cells, drop in zip(lstm_layers, dropouts):
-            model.add(LSTM(n_cells, activation='relu', recurrent_activation='selu'))
+        model.add(LSTM(lstm_layers[0],
+                       activation='relu',
+                       return_sequences=True,
+                       input_shape=(seq_length, self.X_train.shape[1])))
+        model.add(Dropout(dropouts[0]))
+        for n_cells, drop in zip(lstm_layers[1:-1], dropouts[1:-1]):
+            model.add(LSTM(n_cells, activation='relu',
+                           recurrent_activation='selu',
+                           return_sequences=True
+                           ))
             model.add(Dropout(drop))
+        model.add(LSTM(lstm_layers[-1], activation='selu'))
+        model.add((Dropout(dropouts[-1])))
         model.add(Dense(1))
 
         sgd = optimizers.sgd(lr=l_rate, momentum=p, decay=decay)
@@ -87,12 +100,12 @@ class ModelMaker:
 
     def fit_model(self, param_grid):
         self.get_data()
-        krgmodel = KerasRegressorGenerator(build_fn=self.create_model,
-                                           val_data={'X':self.X_val, 'y':self.y_val})
+        krgmodel = KerasRegressorGenerator(build_fn=self.create_model)
 
         grid = GridSearchCV(estimator=krgmodel, param_grid=param_grid, n_jobs=-1)
-        grid_results=grid.fit(self.X_train, self.y_train)
-
+        grid_results=grid.fit(self.X_train, self.y_train, val_data={'X':self.X_val, 'y':self.y_val})
+        best = grid.best_estimator_
+        return grid_results, best
 
 
 
