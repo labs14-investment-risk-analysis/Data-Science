@@ -92,7 +92,7 @@ class ModelMaker:
 
         sgd = optimizers.sgd(lr=l_rate, momentum=p, decay=decay)
 
-        model.compile(optimizer=sgd, loss=loss, metrics=['accuracy'])
+        model.compile(optimizer=sgd, loss=loss)
 
         return model
 
@@ -105,6 +105,7 @@ class ModelMaker:
         grid = GridSearchCV(estimator=krgmodel, param_grid=param_grid, n_jobs=-1)
         grid_results=grid.fit(self.X_train, self.y_train, val_data={'X':self.X_val, 'y':self.y_val})
         best = grid.best_estimator_
+
         return grid_results, best
 
 

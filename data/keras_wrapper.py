@@ -35,13 +35,13 @@ class KerasRegressorGenerator(KerasRegressor):
                                                   seq_length=self.sk_params['seq_length'],
                                                   batch_size=self.sk_params['batch_size'])
 
-            early_stopping = EarlyStopping( patience=5, verbose=5, mode="auto", restore_best_weights=True)
+            early_stopping = EarlyStopping(monitor='val_loss', patience=5, verbose=5, mode="auto", restore_best_weights=True)
             model_checkpoint = ModelCheckpoint("results/best_weights.{epoch:02d}-{val_loss:.2f}.hdf5", verbose=5,
                                                save_best_only=True, mode="auto")
         else:
             val_data_generator = None
             early_stopping = EarlyStopping(monitor="acc", patience=3, verbose=5, mode="auto", restore_best_weights=True)
-            model_checkpoint = ModelCheckpoint("results/best_weights.{epoch:02d}-{loss:.5f}.hdf5", monitor="acc",
+            model_checkpoint = ModelCheckpoint("results/best_weights.{epoch:02d}-{loss:.5f}.hdf5", monitor="loss",
                                                verbose=5, save_best_only=True, mode="auto")
 
         callbacks = [early_stopping, model_checkpoint]
@@ -52,7 +52,8 @@ class KerasRegressorGenerator(KerasRegressor):
             train_data_generator,
             epochs=epochs,
             validation_data=val_data_generator,
-            callbacks=callbacks
+            callbacks=callbacks,
+            verbose=2
         )
 
         return self.__history
