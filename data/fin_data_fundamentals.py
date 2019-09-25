@@ -123,8 +123,10 @@ def get_fundamentals(tkr_id,
     # if fund_dict[list(fund_dict.keys())[0]]['date'] == None:
     #     fund_dict[list(fund_dict.keys())[0]]['date'] = increment_months(
     #         fund_dict[list(fund_dict.keys())[1]]['date'], -3)
+    
     prev_date_assigned = False
 
+    
     for fun_key in fund_dict.keys():
         if prev_date_assigned == False:
             if fund_dict[fun_key]['date'] == None:
