@@ -82,11 +82,11 @@ class ModelMaker:
         model.add(Dropout(dropouts[0]))
         for n_cells, drop in zip(lstm_layers[1:-1], dropouts[1:-1]):
             model.add(LSTM(n_cells, activation='relu',
-                           recurrent_activation='selu',
+                           #recurrent_activation='relu',
                            return_sequences=True
                            ))
             model.add(Dropout(drop))
-        model.add(LSTM(lstm_layers[-1], activation='selu'))
+        model.add(LSTM(lstm_layers[-1], activation='relu'))
         model.add((Dropout(dropouts[-1])))
         model.add(Dense(1))
 
@@ -120,12 +120,12 @@ class ModelMaker:
 
         dts = DailyTimeSeries(self.symbol)
         df = dts.initiate()
-        sleep(5)
+        sleep(3)
 
         df = dts.add_fundamentals(df, self.fundamentals)
-        sleep(7)
+        sleep(5)
         df = dts.add_technicals(self.technicals, df)
-        sleep(15)
+        sleep(10)
         df = dts.add_macro(df, self.macros)
 
         todrop = []
