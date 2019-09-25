@@ -11,37 +11,29 @@ https://www.youtube.com/watch?v=WrX_BZWzF74&amp=&feature=youtu.be
 
 Mention Teamates
 
-The project that I am introducing is the Investment Risk Analysis Project.  Its goal is to make equities investing simpler and safer by accurately assessing what the market factors that contribute to the risk of investing in a given company are. All investors, from the retail investor to the professional hedge fund manager, are faced with the daunting task of assimilating a forbiddingly vast amount of information that is changing on a daily basis, a cognitive demand that no one can master.
+The project that I am introducing is the Investment Risk Analysis Project.  Its goal is to make equities investing simpler and safer by accurately assessing what the market factors that contribute to the risk of investing in a given company are. All investors, from the retail investor to the professional hedge fund manager, are faced with the daunting task of assimilating a forbiddingly vast amount of information that is changing on a daily basis.
 
 By systematically breaking down the movement of a company’s stock price into its constituent factors - whether macroeconomic, technical, or fundamental - we can help diminish the overwhelming complexity of the investment process, and in turn make investing both a safer and more rational process.
 
 
 2. Technical skills/languages
  - Python
-     - Artificial Neural Networks
+ - Model training takes place on AWS
  - Data Ingestion Engine
-     - OOP
      - Alpha Vantage, Intrinio, Quandl APIs, Pandas
  - Modeling 
      - LSTM-RNN using Keras with a TensorFlow Backend
      - Modified Scikit learn wrapper with bespoke grid search
  - Interpretability
      - Shapley Values provided by SHAP
-
- - Model training takes place on AWS
-
-4. Demo the product (share screen) /show code (if needed), 
-
-    1. Problem solving skill (approach taken, options considered to solve a problem)
-    2. Collaboration skill (a story of working with others, experience working on a team, etc.)
-    3. Planning skill (project management, stories, project breakdown)
-    
     
 Start with stories: interviewing Quants in industry. Mention current quantitative analysis SOP involving finding monotonic correlation (spearman's rho). We want to find more than just traditional correlation, but find interaction between features. 
     
 This project was incredibly technical, demanding a wide-variety of skillsets. Our approach was iterative, tackling each major component one after another. Our first challenge was reliable and flexible data ingestion. This we achieved by creating a DailyTimeSeries class that incorporated Equity Prices, Macroeconomic Indicators, Technicals and Fundamentals. 
 
-We then moved on to modeling. Our goal was to create a decently generalizable model from which we can extract feature interactions. To better tune our model paramters, we created a custom grid search by breaking down the Keras Sklearn wrapper to better fit our needs. This search then iterates through a list of equities we want to analyze saving the model weights to another directory. 
+We then moved on to modeling. Our goal was to create a decently generalizable model from which we can extract feature interactions. (seen here)
+
+To better tune our model paramters, we created a custom grid search by breaking down the Keras Sklearn wrapper to better fit our needs. This search then iterates through a list of equities we want to analyze saving the model weights to another directory. 
 
 Our feature interactions are then extracted via a methodology from coalitional Game Theory called Shapley Values:
 
