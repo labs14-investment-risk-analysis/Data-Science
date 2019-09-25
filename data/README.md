@@ -1,8 +1,19 @@
-# Generating Daily Time Series With `fin_data`
+# Investment Risk Analysis Support Modules
+------------
+
+Over the course of Labs 15, the Investment Risk Analysis team developed a series a support modules to aid in research and development. The documentation for each module is in this README. Please see the table of contents below.
+
+Table of Contents
+------------
+- [Data Ingestion](#Generating-Daily-Time-Series-With-`fin_data`)
+- [Fractional Differentiation](#Fractional-Differentiation-with-fracdiff)
+- [Shapley Values](#Shapley-Value-Intepretation-with-`shap-interpret`)
+
+## Generating Daily Time Series With `fin_data`
 
 The purpose of fin_data is to provide a simple yet flexible method for generating financial time series for the Investment Risk Analysis project for Lambda Labs. It relies on a series of API calls to create a data pipeline for model training.
 
-Table of Contents
+`fin_data` Table of Contents
 -----------
 
 - [Getting Started](#Getting-Started)
@@ -21,7 +32,7 @@ Table of Contents
 This section covers the requirements for using the data ingestion class locally.
 
 ### Importing the Ingestion Class
-It is necessary that your notebook is either working in the base repository for Investment Risk Analysis or the data folder. 
+It is necessary that your notebook is either working in the base repository for Investment Risk Analysis or the data folder.
 - If working in the base repository, the import will be `from data.fin_data import DailyTimeSeries`
 - If working in the data folder, the import will be `from fin_data import DailyTimeSeries`
 
@@ -75,7 +86,7 @@ From here, you can judiciously add other financial information to your dataframe
 
 ## Additional Methods
 
-These methods are the meat of fin_data. It ingests data from API calls and merges them to the given dataframe with an inner merge on the datetime index. In cases where the new data is relatively sparse, it may significantly reduce the total amount of data in the dataset. 
+These methods are the meat of fin_data. It ingests data from API calls and merges them to the given dataframe with an inner merge on the datetime index. In cases where the new data is relatively sparse, it may significantly reduce the total amount of data in the dataset.
 
 ### add_securities()
 
@@ -165,7 +176,7 @@ data with the existing dataframe. Requires two parameters, **a list of macroecon
 
     indices = ['confidence_index','trade_index', 'longterm_rates']
 
-    df = apple.add_macro(primary_df=df, 
+    df = apple.add_macro(primary_df=df,
                          indices=indices)
 
 ![limited macro dataframe](./img/readme_img/macro_df.png)
@@ -173,6 +184,7 @@ data with the existing dataframe. Requires two parameters, **a list of macroecon
 | Macroeconomic Indicator | API Input text | Indicator Description  
 | --------------------| ------------ | ------------ |
 | [Nominal Home Price Index](https://www.quandl.com/data/YALE/NHPI-Historical-Housing-Market-Data-Nominal-Home-Price-Index)   | housing_index    | The Nominal Home Price Index is a measurement of changes over time in the contractors' selling prices of new residential houses. It is recorded on a monthly basis and covers single homes, semi-detached homes and townhouses.
+| [New Privately-Owned Housing Units](https://www.quandl.com/data/FRED/PERMIT1NSA-New-Privately-Owned-Housing-Units-Authorized-by-Building-Permits-1-Unit-Structures)   | housing_index    | The Authorized by Building Permits: 1-Unit Structures is a key leading indicator of macroeconomic strength. It documents the number of new single unit homes being build.
 | [Investor Confidence](https://www.quandl.com/data/YALE/US_CONF_INDEX_VAL_INDIV-Stock-Market-Confidence-Indices-United-States-Valuation-Index-Data-Individual)   | confidence_index     | The Investor Behavior Project at Yale University, under the direction of Dr. Robert Shiller since its beginning and now under the auspices of the Yale International Center for Finance, has been collecting questionnaire survey data on the behavior of US investors since 1984. Among the studies that this project has produced was a major study of investor thinking on the day of the stock market crash of 1987. As part of this project, regular questionnaire investor attitude surveys have been done continuously since 1989. The following reports on some stock market confidence indexes derived from this survey data. These indexes have a span of nearly twelve years, and thus are the longest-running effort to measure investor confidence and related investor attitudes.
 | [Trade Weighted U.S. Dollar Index: Broad](https://www.quandl.com/data/FRED/TWEXB-Trade-Weighted-U-S-Dollar-Index-Broad)   | trade_index    | A weighted average of the foreign exchange value of the U.S. dollar against the currencies of a broad group of major U.S. trading partners.
 | [US Treasury Bond Long-Term Rates](https://www.quandl.com/data/USTREASURY/LONGTERMRATES-Treasury-Long-Term-Rates)   | longterm_rates    | The index is the unweighted average of bid yields on all outstanding fixed-coupon bonds neither due nor callable in less than 10 years.
@@ -194,8 +206,15 @@ It is best practice to view the results before passing the whole list into the a
                  'totaloperatingexpenses',
                  'weightedavebasicsharesos']
 
-    apple.add_fundamentals(primary_df=df, 
+    apple.add_fundamentals(primary_df=df,
                            fundamentals_list=fund_list)
 
 ![limited_fundamental_dataframe](./img/readme_img/funds_df.png)
 
+## Fractional Differentiation with `fracdiff`
+
+Under Construction
+
+## Shapley Value Intepretation with `shap_interpret`
+
+The purpose of shap_interpret is to provide a number of useful functions for LSTM interpretation. In its current state, it provides quality of life solutions to problems that occur across the Investment-Risk_Analysis pipeline.
