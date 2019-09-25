@@ -11,7 +11,7 @@ https://www.youtube.com/watch?v=WrX_BZWzF74&amp=&feature=youtu.be
 
 Mention Teamates
 
-The Investment Risk Ratings Project has one overarching goal: to make equities investing simpler and safer by accurately assessing what the market factors that contribute to the risk of investing in a given company are. All investors, from the retail investor to the professional hedge fund manager, are faced with the daunting task of assimilating a forbiddingly vast amount of information that is changing on a daily basis, a cognitive demand that no one can master.
+The project that I am introducing is the Investment Risk Analysis Project.  Its goal is to make equities investing simpler and safer by accurately assessing what the market factors that contribute to the risk of investing in a given company are. All investors, from the retail investor to the professional hedge fund manager, are faced with the daunting task of assimilating a forbiddingly vast amount of information that is changing on a daily basis, a cognitive demand that no one can master.
 
 By systematically breaking down the movement of a company’s stock price into its constituent factors - whether macroeconomic, technical, or fundamental - we can help diminish the overwhelming complexity of the investment process, and in turn make investing both a safer and more rational process.
 
@@ -28,14 +28,9 @@ By systematically breaking down the movement of a company’s stock price into i
  - Interpretability
      - Shapley Values provided by SHAP
 
- - Model training takes place of AWS
+ - Model training takes place on AWS
 
 4. Demo the product (share screen) /show code (if needed), 
-
-- Mention data ingestion engine
-- Show images in slide-deck from 2nd Canvas to demonstrate modeling and interpretability output
-- Move on to Custom Grid Search Paramters
-- Mention further automation for training and saving model weights.
 
     1. Problem solving skill (approach taken, options considered to solve a problem)
     2. Collaboration skill (a story of working with others, experience working on a team, etc.)
@@ -48,10 +43,12 @@ This project was incredibly technical, demanding a wide-variety of skillsets. Ou
 
 We then moved on to modeling. Our goal was to create a decently generalizable model from which we can extract feature interactions. To better tune our model paramters, we created a custom grid search by breaking down the Keras Sklearn wrapper to better fit our needs. This search then iterates through a list of equities we want to analyze saving the model weights to another directory. 
 
-Our feature interactions are then extracted via a methodology from Game Theory called Shapley Values:
+Our feature interactions are then extracted via a methodology from coalitional Game Theory called Shapley Values:
 
-The goal of SHAP is to explain the prediction of an instance x by computing the contribution of each feature to the prediction. The SHAP explanation method computes Shapley values from coalitional game theory. The feature values of a data instance act as players in a coalition. Shapley values tell us how to fairly distribute the “payout” (= the prediction) among the features. The Shapley value is the average marginal contribution of a feature value across all possible Combinations.
+The goal of Shapley Values is to explain the prediction of an instance by computing the contribution of each feature to the prediction. The feature values of a data instance act as players in a coalition. Shapley values tell us how to fairly distribute the “payout” (= the prediction) among the features. The Shapley value is the average marginal contribution of a feature value across all possible coatilitions.
 
 The benefit of using the SHAP library is that it provides us with a global view of the interactions as well as a very localized view per timestep sample. As a result, we can return a depth of information to our stakeholder. 
 
 The team collaborated heavily on the devlopment of each method in the data ingestion engine, as well as modeling the equity prices. Our process involved siloing for several days and returning to integrate individual methodologies. This allowed us to build off of eachother's work without influencing research paths overmuch. 
+
+The team has achieved successful baseline modeling as a part of the project's research and development. We are ready to now take this project to production, creating a series of resting api's to handle requests from a user-friendly front end. We feel confident in our model's ability to effectively generalize market movements, and explain model decisions based on coalition contribution. This information on both a micro and macro scale can be used to better inform decision makers investing in publicly traded companies. 

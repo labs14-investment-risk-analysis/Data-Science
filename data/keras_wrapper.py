@@ -32,13 +32,13 @@ class KerasRegressorGenerator(KerasRegressor):
         self.symbol = kwargs['symbol']
         file_path = "/home/ec2-user/SageMaker/Data-Science/jupyter_notebooks/modeling/results/best_weights.{}.hdf5".format(self.symbol)
         if 'val_data' in kwargs:
-            
+
             self.val_data_generator = self.create_gens(kwargs['val_data']['X'],
                                                   kwargs['val_data']['y'],
                                                   seq_length=self.sk_params['seq_length'],
                                                   batch_size=self.sk_params['batch_size'])
 
-            early_stopping = EarlyStopping(monitor='val_loss', patience=5, verbose=5, mode="min", 
+            early_stopping = EarlyStopping(monitor='val_loss', patience=5, verbose=5, mode="min",
                                            #restore_best_weights=True
                                           )
             model_checkpoint = ModelCheckpoint(monitor='val_loss',
@@ -63,22 +63,6 @@ class KerasRegressorGenerator(KerasRegressor):
         )
 
         return self.__history
-
-#     def score(self, X, y, **kwargs):
-#         kwargs = self.filter_sk_params(Sequential.evaluate_generator, kwargs)
-#         print('ran score')
-#         loss_name = self.model.loss
-#         if hasattr(loss_name, '__name__'):
-#             loss_name = loss_name.__name__
-#         outputs = self.model.evaluate_generator(self.train_data_generator, **kwargs)
-#         if type(outputs) is not list:
-#             outputs = [outputs]
-#         for name, output in zip(self.model.metrics_names, outputs):
-#             if name == 'acc':
-#                 return output
-#         raise Exception('The model is not configured to compute accuracy. '
-#                         'You should pass `metrics=["accuracy"]` to '
-#                         'the `model.compile()` method.')
 
     def score(self, x, y, **kwargs):
         """Returns the mean loss on the given test data and labels.
