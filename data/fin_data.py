@@ -72,10 +72,7 @@ class DailyTimeSeries:
         datapoints.
 
     list_available_fundamentals :
-        Finds and returns a list of company fundamnetals. Given
-        the variations in accounting practices, this method is
-        necessary to populate the fundamentals list in the
-        add_fundamentals() method.
+
 
     add_fundamentals :
         Adds company fundamentals and merges them to an existing
@@ -270,8 +267,7 @@ class DailyTimeSeries:
                 "confidence_index" : "YALE/US_CONF_INDEX_VAL_INDIV",
                 "trade_index" : "FRED/TWEXB",
                 "longterm_rates" : "USTREASURY/LONGTERMRATES",
-                "shortterm_rates" : "USTREASURY/BILLRATES",
-                "housing_permits" : "FRED/PERMIT1NSA"
+                "shortterm_rates" : "USTREASURY/BILLRATES"
                 }
 
         # Loop through the list of indices
@@ -286,7 +282,7 @@ class DailyTimeSeries:
             dates = pd.date_range(start_date, end_date, freq = 'D')
             dates.name = 'date'
             data = data.reindex(dates, method = 'ffill')
-            data.index = data.index.astype(str)
+            #data.index = data.index.astype(str)
 
         # Elif statements for changing the column names
 
@@ -297,13 +293,6 @@ class DailyTimeSeries:
                      'Index: Nominal Home Price Index Added \n',
                      '###################################################################')
                 warnings.warn("The latest value available for Housing Index is from January 2019.")
-
-            if i == "housing_permits":
-                data = data.rename(columns = {'Value' : 'new_housing_permits'})
-
-                print('###################################################################','\n',
-                     'Index: New Housing Permits Added \n',
-                     '###################################################################')
 
             elif i == "trade_index":
                 data = data.rename(columns = {'Value': 'trade_value'})
@@ -407,6 +396,7 @@ class DailyTimeSeries:
             defined as an object attribute. Used for comparing technical
             indicators from other securities.
         """
+
         # Check for supplimental symbol
         if supp_symbol ==  None:
             symbol = self.symbol
@@ -415,10 +405,11 @@ class DailyTimeSeries:
 
         from fin_data_fundamentals import increment_months
 
-        # Get important dates from primary data frame
-        dates_sorted = sorted(primary_df.index, key=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'))
+        # Get important dates from primary dataframe
+        dates_sorted = primary_df.index
 
-        preceding_quarter_date = increment_months(datetime.datetime.strptime(dates_sorted[0], '%Y-%m-%d'), -4).strftime("%Y-%m-%d")
+        # Sort dates
+        preceding_quarter_date = increment_months(dates_sorted[0], -4)
 
         before_date = dates_sorted[-1]
         after_date = dates_sorted[0]
