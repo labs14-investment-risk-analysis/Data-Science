@@ -130,7 +130,7 @@ class FractionalDifferentiation:
         return weights
 
     @staticmethod
-    def frac_diff_ffd(series, diff_amt, thresh=1e-6):
+    def frac_diff_ffd(series, diff_amt, thresh=1e-5):
         """
         Source: Chapter 5, AFML (section 5.5, page 83);
         References:

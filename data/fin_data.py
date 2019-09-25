@@ -69,15 +69,15 @@ class DailyTimeSeries:
         National Housing Price Index, Trade-Weighted Dollar Price Index, Investors
         Confidence Index, to the dataset. Some Indices do not have values recorded
         for recent months and merging with other dataframes might limit the number of
-        datapoints. 
+        datapoints.
 
-    list_available_fundamentals : 
-    
+    list_available_fundamentals :
 
-    add_fundamentals : 
-        Adds company fundamentals and merges them to an existing 
-        dataframe. Best if used in conjunction with 
-        list_available_fundamentals() to retrieve a usesable list of 
+
+    add_fundamentals :
+        Adds company fundamentals and merges them to an existing
+        dataframe. Best if used in conjunction with
+        list_available_fundamentals() to retrieve a usesable list of
         company fundamentals data.
     """
 
@@ -113,7 +113,7 @@ class DailyTimeSeries:
         # API Call
         data, meta_data = ts.get_daily_adjusted(symbol=self.symbol,
                                        outputsize=self.outputsize)
-        
+
         data = data.drop(columns='8. split coefficient')
 
         # Print Statement
@@ -132,7 +132,7 @@ class DailyTimeSeries:
 
         data = data.sort_values(by='date',
                                 ascending=True)
-        
+
         return data
 
     def add_securities(self, symbols, primary_df):
@@ -269,7 +269,7 @@ class DailyTimeSeries:
                 "longterm_rates" : "USTREASURY/LONGTERMRATES",
                 "shortterm_rates" : "USTREASURY/BILLRATES"
                 }
-        
+
         # Loop through the list of indices
         i_count = 0
         for i in indices:
@@ -301,7 +301,7 @@ class DailyTimeSeries:
                 print('###################################################################','\n',
                      'Trade Weighted U.S. Dollar Index: Broad Added \n',
                      '###################################################################')
-          
+
             elif i == "confidence_index":
                 data = data.rename(columns = {'Index Value' : 'conf_index', 'Standard Error': 'conf_index_SE'})
 
@@ -309,7 +309,7 @@ class DailyTimeSeries:
                 print('###################################################################','\n',
                      'Index: Yale Investor Behavior Project Added \n',
                      '###################################################################')
-   
+
             elif i == "longterm_rates":
                 data = data.rename(columns = {'LT Composite > 10 Yrs': '10 Yrs Rates', 'Treasury 20-Yr CMT': '20-Yr Maturity Rate'})
                 data = data.drop(columns = 'Extrapolation Factor')
@@ -317,7 +317,7 @@ class DailyTimeSeries:
                 print('###################################################################','\n',
                      'US Treasury Bond Long-Term Rates Added \n',
                      '###################################################################')
-   
+
             elif i == "shortterm_rates":
                 data = data.rename(columns = {'4 Wk Bank Discount Rate': '4_Wk_DR',
                                             '4 Wk Coupon Equiv': '4_Wk_CE',
@@ -329,14 +329,14 @@ class DailyTimeSeries:
                                             '26 Wk Coupon Equiv': '26_Wk_CE',
                                             '52 Wk Bank Discount Rate': '52_Wk_DR',
                                             '52 Wk Coupon Equiv': '52_Wk_CE'})
-                
+
                 print('###################################################################','\n',
                      'US Treasury Bond Short-Term Rates Added \n',
                      '###################################################################')
                 warnings.warn("Contains Null Values")
 
-            else: 
-                pass     
+            else:
+                pass
 
             if i_count == 0:
                 final_df = primary_df.merge(data,
@@ -352,10 +352,10 @@ class DailyTimeSeries:
 
     def list_available_fundamentals(self, supp_symbol=None):
         """
-        Finds and returns a list of company fundamnetals. Given 
-        the variations in accounting practices, this method is 
-        necessary to populate the fundamentals list in the 
-        add_fundamentals() method. 
+        Finds and returns a list of company fundamnetals. Given
+        the variations in accounting practices, this method is
+        necessary to populate the fundamentals list in the
+        add_fundamentals() method.
 
         Parameters
         ----------
@@ -364,7 +364,7 @@ class DailyTimeSeries:
             defined as an object attribute. Used for comparing technical
             indicators from other securities.
         """
-        
+
         # Check for supplimental symbol
         if supp_symbol ==  None:
             symbol = self.symbol
@@ -375,20 +375,20 @@ class DailyTimeSeries:
 
         return fund_list
 
-    
+
     def add_fundamentals(self, primary_df, fundamentals_list, supp_symbol=None):
         """
-        Adds company fundamentals and merges them to an existing 
-        dataframe. Best if used in conjunction with 
-        list_available_fundamentals to retrieve a usesable list of 
-        company fundamentals data. 
+        Adds company fundamentals and merges them to an existing
+        dataframe. Best if used in conjunction with
+        list_available_fundamentals to retrieve a usesable list of
+        company fundamentals data.
 
         Parameters
         ----------
         fundamentals list : list
-            List of company fundamentals abbreviations to add to the 
-            dataframe. Please utilize the list_available_fundamentals() 
-            method to create this list. 
+            List of company fundamentals abbreviations to add to the
+            dataframe. Please utilize the list_available_fundamentals()
+            method to create this list.
         primary_df : pandas dataframe
             pandas dataframe to be appended.
         supp_symbol : str
@@ -396,41 +396,43 @@ class DailyTimeSeries:
             defined as an object attribute. Used for comparing technical
             indicators from other securities.
         """
+
         # Check for supplimental symbol
         if supp_symbol ==  None:
             symbol = self.symbol
         else:
             symbol = supp_symbol
-        
+
         from fin_data_fundamentals import increment_months
-        
-        # Get important dates from primary data frame
+
+        # Get important dates from primary dataframe
         dates_sorted = primary_df.index
-        
-        #preceding_quarter_date = increment_months(datetime.datetime.strptime(dates_sorted[0], '%Y-%m-%d'), -4).strftime("%Y-%m-%d")
+
+        # Sort dates
         preceding_quarter_date = increment_months(dates_sorted[0], -4)
+
         before_date = dates_sorted[-1]
         after_date = dates_sorted[0]
 
 
         # Run get_fundamentals function, return results as dataframe
         # set 'date' as index
-        fun_df = get_fundamentals(tkr_id=symbol, 
-                                  after_date=after_date, 
-                                  fundamentals_toget=fundamentals_list, 
+        fun_df = get_fundamentals(tkr_id=symbol,
+                                  after_date=after_date,
+                                  fundamentals_toget=fundamentals_list,
                                   sandbox=False).set_index('date')
-        
-        
+
+
         # Get all column names
         columns = primary_df.columns.append(fun_df.columns)
-        
+
         # Set up interim dataframe
         ntrm_df = primary_df.reindex(columns=primary_df.columns.append(fun_df.columns))
-        
+
         # Manual merge. Prevents pandas duplication issues merging.
         # Regular pandas merge could be done if both indices are converted to datetime
         # and resulting dataframe index is converted back to string date.
-        
+
         for row in fun_df.iterrows():
             date_qr = row[0]
             for col in row[1].index:
@@ -443,25 +445,25 @@ class DailyTimeSeries:
                                      fundamentals_toget=fundamentals_list,
                                      sandbox=False
                                     )
-        
+
         # If before_df data is available, add to interim df
-        
+
         if len(before_df) != 0:
             if ntrm_df.iloc[0].isnull().any():
                 for k,v in zip(before_df.iloc[0].index, before_df.iloc[0].values):
                     if k != 'date':
                         ntrm_df.loc[ntrm_df.index == after_date, k] = v
-        
+
         # Forward fill from publication dates
         ntrm_df = ntrm_df.fillna(method='bfill')
-        
+
         # Print Statement
         print('###################################################################','\n',
               'Ticker: ' , symbol, '\n',
               'Fundamentals Retrieved: ', columns.values,'\n',
               '###################################################################')
 
-        
+
         # Print Statement
         print('###################################################################','\n',
         'Ticker: ' , self.symbol, '\n',
