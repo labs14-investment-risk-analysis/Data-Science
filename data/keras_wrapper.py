@@ -29,9 +29,10 @@ class KerasRegressorGenerator(KerasRegressor):
 
         self.train_data_generator = self.create_gens(X, y, seq_length=self.sk_params['seq_length'],
                                                 batch_size=self.sk_params['batch_size'])
-        file_path = "/home/ec2-user/SageMaker/Data-Science/jupyter_notebooks/modeling/results/best_weights.{epoch:02d}-{val_loss:.2f}.hdf5"
+        self.symbol = kwargs['symbol']
+        file_path = "/home/ec2-user/SageMaker/Data-Science/jupyter_notebooks/modeling/results/best_weights.{}.hdf5".format(self.symbol)
         if 'val_data' in kwargs:
-        
+            
             self.val_data_generator = self.create_gens(kwargs['val_data']['X'],
                                                   kwargs['val_data']['y'],
                                                   seq_length=self.sk_params['seq_length'],
