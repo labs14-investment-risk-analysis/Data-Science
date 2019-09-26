@@ -13,6 +13,7 @@ from time import sleep
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
+from keras.preprocessing.sequence import TimeseriesGenerator
 from keras.models import Sequential
 from keras.layers import LSTM
 from keras.layers import Dense
@@ -20,6 +21,7 @@ from keras.layers import RepeatVector
 from keras.layers import TimeDistributed
 from keras.layers import Dropout
 from keras import optimizers
+from shap import DeepExplainer
 
 random.seed(42)
 
@@ -43,6 +45,7 @@ class ModelMaker:
 
     def __init__(self,
                  symbol,
+                 save_path,
                  fundamentals=['totalrevenue', 'totalcostofrevenue', 'totalgrossprofit',
                                'totalpretaxincome', 'weightedavebasicdilutedsharesos', 'cashdividendspershare'],
                  technicals=['SMA', 'WMA', 'STOCH', 'ROC', 'AROON'],
@@ -54,6 +57,7 @@ class ModelMaker:
         self.technicals = technicals
         self.macros = macros
         self.shift = shift
+        self.save_path = save_path + '/' + self.symbol + '/'
         self.X_train = None
         self.X_test = None
         self.X_val = None
@@ -61,6 +65,13 @@ class ModelMaker:
         self.y_train = None
         self.y_test = None
         self.y_val = None
+        self.best_model = None
+        self.shapley_full = None
+
+        try:
+            os.stat(save_path)
+        except:
+            os.mkdir(save_path)
 
     def create_model(self, seq_length,
                      batch_size,
@@ -96,25 +107,52 @@ class ModelMaker:
 
         return model
 
-#    def set_params(self, lstm_layers, dropouts, l_rate, momentum, decay, loss):
-
     def fit_model(self, param_grid):
+        # Parameter grid for create_model, save_path and symbol
         self.get_data()
-        krgmodel = KerasRegressorGenerator(build_fn=self.create_model)
+        krg_model = KerasRegressorGenerator(build_fn=self.create_model)
 
-        grid = GridSearchCV(estimator=krgmodel, param_grid=param_grid, n_jobs=-1)
-        grid_results=grid.fit(self.X_train, self.y_train, val_data={'X':self.X_val, 'y':self.y_val})
-        best = grid.best_estimator_
-
+        grid = GridSearchCV(estimator=krg_model, param_grid=param_grid, n_jobs=-1)
+        grid_results = grid.fit(self.X_train,
+                                self.y_train,
+                                val_data={'X': self.X_val, 'y': self.y_val},
+                                weights_dir=self.save_path,
+                                symbol=self.symbol)
+        best = grid_results.best_estimator_
         return grid_results, best
 
+    def save_results(self, sk_results, sk_estimator):
+        # Pass in 'best' from fit_model return
+        save_params_name = "params.{}.pickle".format(self.symbol)
+        save_model_name = "model.{}".format(self.symbol)
+        save_shapley_name = "shapley.{}".format(self.symbol)
+        try:
+            params_file = open(str(self.save_path + save_params_name), 'wb')
+            pickle.dump(sk_results.best_params_, params_file)
+            params_file.close()
+            print('saved params as ', save_params_name)
+            sk_estimator.model.save(str(self.save_path + save_model_name))
+            print('saved model as ', save_model_name)
+            np.save(str(self.save_path + save_shapley_name), self.shapley_full)
+            print('saved shapley values as ', save_shapley_name)
+        except:
+            print('error saving files')
+        return None
 
 
+    def extract_data(self, generator):
 
+        #
+        for i in np.arange(len(generator)):
+            if i == 0:
+                a, b = generator[i]
+            else:
+                c, d = generator[i]
 
+                a = np.vstack((a, c))
+                b = np.vstack((b, d))
 
-
-
+        return a, b
 
     def get_data(self, train_cut=.8, frac_diff_target=True):
 
@@ -128,15 +166,15 @@ class ModelMaker:
         sleep(10)
         df = dts.add_macro(df, self.macros)
 
-        todrop = []
+        to_drop = []
 
         for col in df.columns:
             if df[col].isnull().sum() / len(df) > .25:
                 print('{} is missing '.format(col), df[col].isnull().sum())
                 print('{} dropped'.format(col))
-                todrop.append(col)
+                to_drop.append(col)
 
-        df = df.drop(labels=todrop, axis=1)
+        df = df.drop(labels=to_drop, axis=1)
 
         if frac_diff_target:
             if str(self.symbol + '_adjusted_close') in df.columns:
@@ -181,3 +219,27 @@ class ModelMaker:
         self.y_val = y_val
 
         return None
+
+    def create_gens(self, X, y, seq_length=30, batch_size=15):
+        generator = TimeseriesGenerator(X, y,
+                                        length=seq_length,
+                                        sampling_rate=1,
+                                        stride=1,
+                                        batch_size=batch_size)
+        return generator
+
+    def get_shapley(self, best):
+        self.best_model = best
+        dexp = DeepExplainer(model=self.best_model)
+        best_params = self.best_model.best_prams_
+        seq_length = best_params['seq_length']
+        batch_size = best_params['batch_size']
+        data = self.create_gens(X = self.X_test,
+                                y = self.y_test,
+                                seq_length=seq_length,
+                                batch_size=batch_size)
+        X_test_processed, y_test_processed = self.extract_data(data)
+        dexp = DeepExplainer(model=self.best_model, data=X_test_processed)
+        self.shapley_full = dexp.shap_values(X_test_processed)
+        return None
+
